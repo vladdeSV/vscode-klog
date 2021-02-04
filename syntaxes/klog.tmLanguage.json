@@ -79,10 +79,6 @@
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
                         {
-                            "match": "^ \\w.*",
-                            "name": "invalid.illegal"
-                        },
-                        {
                             "include": "#tag"
                         }
                     ]
@@ -110,10 +106,6 @@
                         },
                         {
                             "include": "#duration"
-                        },
-                        {
-                            "name": "invalid.illegal",
-                            "match": ".*"
                         }
                     ]
                 }
