@@ -1,0 +1,33 @@
+{
+    "name": "vscode-klog",
+    "displayName": "Klog support",
+    "description": "Highlight and helper for Klog",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.52.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "klog",
+                "aliases": [
+                    "Klog",
+                    "klog"
+                ],
+                "extensions": [
+                    ".klg"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "klog",
+                "scopeName": "source.klog",
+                "path": "./syntaxes/klog.tmLanguage.json"
+            }
+        ]
+    }
+}

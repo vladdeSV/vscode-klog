@@ -1,0 +1,98 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Klog",
+    "repository": {
+        "tag": {
+            "name": "keyword.other.tag.klog",
+            "match": "#[a-zA-Z\\d_]+"
+        },
+        "timespan": {
+            "name": "string.unquoted.klog",
+            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other"
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "name": "string.unquoted.klog",
+                    "include": "#tag"
+                }
+            ]
+        },
+        "timespan-open-ended": {
+            "name": "string.unquoted.klog",
+            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other"
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#tag"
+                }
+            ]
+        },
+        "duration": {
+            "name": "string.unquoted.klog",
+            "begin": "(?<=^(?:\t| {2,4}))([+-]?(\\d+h\\d+m|\\d+h|\\d+m))",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control"
+                }
+            },
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#tag"
+                }
+            ]
+        }
+    },
+    "patterns": [
+        {
+            "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\\\\\d{2}\\\\\\d{2})(?:\\s+\\((\\d+h\\d+m|\\d+h|\\d+m)!\\))?",
+            "beginCaptures": {
+                "1": {
+                    "name": "markup.heading.date.klog"
+                },
+                "2": {
+                    "name": "keyword.control.klog"
+                }
+            },
+            "patterns": [
+                {
+                    "name": "string.unquoted.klog",
+                    "begin": "^(?=\\S)",
+                    "end": "(?=^$|^(?: {2,4}|\t))",
+                    "patterns": [
+                        {
+                            "include": "#tag"
+                        }
+                    ]
+                },
+                {
+                    "begin": "^(?:\t| {2,4})",
+                    "end": "$",
+                    "patterns": [
+                        {
+                            "include": "#timespan"
+                        },
+                        {
+                            "include": "#timespan-open-ended"
+                        },
+                        {
+                            "include": "#duration"
+                        }
+                    ]
+                }
+            ],
+            "end": "^$"
+        }
+    ],
+    "scopeName": "source.klog"
+}
