@@ -4,7 +4,7 @@
             "date",
             "20"
         ],
-        "body": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE\n$0"
+        "body": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE"
     },
     "Record": {
         "prefix": "record",
