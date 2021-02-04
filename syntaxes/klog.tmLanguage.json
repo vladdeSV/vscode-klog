@@ -7,7 +7,6 @@
             "match": "#[a-zA-Z\\d_]+"
         },
         "timespan": {
-            "name": "string.unquoted.summary.behind-entry.klog",
             "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
             "beginCaptures": {
                 "1": {
@@ -17,12 +16,14 @@
             "end": "$",
             "patterns": [
                 {
+                    "name": "string.unquoted.summary.behind-entry.klog"
+                },
+                {
                     "include": "#tag"
                 }
             ]
         },
         "timespan-open-ended": {
-            "name": "string.unquoted.summary.behind-entry.klog",
             "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)\\s",
             "beginCaptures": {
                 "1": {
@@ -32,12 +33,14 @@
             "end": "$",
             "patterns": [
                 {
+                    "name": "string.unquoted.summary.behind-entry.klog"
+                },
+                {
                     "include": "#tag"
                 }
             ]
         },
         "duration": {
-            "name": "string.unquoted.summary.behind-entry.klog",
             "begin": "(?<=^(?:\t| {2,4}))(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))\\s",
             "beginCaptures": {
                 "1": {
@@ -49,6 +52,9 @@
             },
             "end": "$",
             "patterns": [
+                {
+                    "name": "string.unquoted.summary.behind-entry.klog"
+                },
                 {
                     "include": "#tag"
                 }
@@ -73,6 +79,10 @@
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
                         {
+                            "match": "^ \\w.*",
+                            "name": "invalid.illegal"
+                        },
+                        {
                             "include": "#tag"
                         }
                     ]
@@ -82,6 +92,17 @@
                     "end": "$",
                     "patterns": [
                         {
+                            "match": "(<)\\d\\d:\\d\\d(>)",
+                            "captures": {
+                                "1": {
+                                    "name": "invalid.illegal"
+                                },
+                                "2": {
+                                    "name": "invalid.illegal"
+                                }
+                            }
+                        },
+                        {
                             "include": "#timespan"
                         },
                         {
@@ -89,6 +110,10 @@
                         },
                         {
                             "include": "#duration"
+                        },
+                        {
+                            "name": "invalid.illegal",
+                            "match": ".*"
                         }
                     ]
                 }
