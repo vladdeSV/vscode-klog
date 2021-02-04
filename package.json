@@ -3,12 +3,26 @@
     "displayName": "Klog support",
     "description": "Highlight and helper for Klog",
     "version": "0.1.0",
+    "license": "MIT",
     "engines": {
         "vscode": "^1.52.0"
     },
     "categories": [
         "Programming Languages"
     ],
+    "author": {
+        "name": "Vladimirs Nordholm",
+        "email": "v@vladde.net",
+        "url": "https://vladde.net/"
+    },
+    "bugs": {
+        "url": "https://github.com/vladdeSV/vscode-klog/issues",
+        "email": "v@vladde.net"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vladdeSV/vscode-klog.git"
+    },
     "contributes": {
         "languages": [
             {
