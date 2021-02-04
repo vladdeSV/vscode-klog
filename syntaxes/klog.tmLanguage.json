@@ -8,7 +8,7 @@
         },
         "timespan": {
             "name": "string.unquoted.klog",
-            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))",
+            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
             "beginCaptures": {
                 "1": {
                     "name": "keyword.other"
@@ -17,14 +17,13 @@
             "end": "$",
             "patterns": [
                 {
-                    "name": "string.unquoted.klog",
                     "include": "#tag"
                 }
             ]
         },
         "timespan-open-ended": {
             "name": "string.unquoted.klog",
-            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)",
+            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)\\s",
             "beginCaptures": {
                 "1": {
                     "name": "keyword.other"
@@ -39,7 +38,7 @@
         },
         "duration": {
             "name": "string.unquoted.klog",
-            "begin": "(?<=^(?:\t| {2,4}))([+-]?(\\d+h\\d+m|\\d+h|\\d+m))",
+            "begin": "(?<=^(?:\t| {2,4}))([+-]?(\\d+h\\d+m|\\d+h|\\d+m))\\s",
             "beginCaptures": {
                 "1": {
                     "name": "keyword.control"
@@ -67,7 +66,7 @@
             "patterns": [
                 {
                     "name": "string.unquoted.klog",
-                    "begin": "^(?=\\S)",
+                    "begin": "\\G",
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
                         {
