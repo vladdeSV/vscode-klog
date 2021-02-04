@@ -7,11 +7,11 @@
             "match": "#[a-zA-Z\\d_]+"
         },
         "timespan": {
-            "name": "string.unquoted.klog",
+            "name": "string.unquoted.summary.behind-entry.klog",
             "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
             "beginCaptures": {
                 "1": {
-                    "name": "keyword.other"
+                    "name": "markup.other.timespan.klog"
                 }
             },
             "end": "$",
@@ -22,11 +22,11 @@
             ]
         },
         "timespan-open-ended": {
-            "name": "string.unquoted.klog",
+            "name": "string.unquoted.summary.behind-entry.klog",
             "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)\\s",
             "beginCaptures": {
                 "1": {
-                    "name": "keyword.other"
+                    "name": "markup.other.timespan.open-ended.klog"
                 }
             },
             "end": "$",
@@ -37,11 +37,14 @@
             ]
         },
         "duration": {
-            "name": "string.unquoted.klog",
-            "begin": "(?<=^(?:\t| {2,4}))([+-]?(\\d+h\\d+m|\\d+h|\\d+m))\\s",
+            "name": "string.unquoted.summary.behind-entry.klog",
+            "begin": "(?<=^(?:\t| {2,4}))(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))\\s",
             "beginCaptures": {
                 "1": {
-                    "name": "keyword.control"
+                    "name": "markup.other.duration.positive.klog"
+                },
+                "2": {
+                    "name": "markup.other.duration.negative.klog"
                 }
             },
             "end": "$",
@@ -60,12 +63,12 @@
                     "name": "markup.heading.date.klog"
                 },
                 "2": {
-                    "name": "keyword.control.klog"
+                    "name": "markup.other.duration.should-total.klog"
                 }
             },
             "patterns": [
                 {
-                    "name": "string.unquoted.klog",
+                    "name": "string.unquoted.summary.after-date.klog",
                     "begin": "\\G",
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
