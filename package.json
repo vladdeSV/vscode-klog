@@ -28,6 +28,12 @@
                 "scopeName": "source.klog",
                 "path": "./syntaxes/klog.tmLanguage.json"
             }
+        ],
+        "snippets": [
+            {
+                "language": "klog",
+                "path": "./snippets/klog.json"
+            }
         ]
     }
 }
