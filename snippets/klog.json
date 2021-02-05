@@ -7,12 +7,13 @@
         "body": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE"
     },
     "Record": {
-        "prefix": "record",
+        "prefix": [
+            "record"
+        ],
         "body": [
-            "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE ${1:(${2:duration}!)}",
+            "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE${1: (${2:duration}!)}",
             "${3:summary}",
-            "\t${4:${5:00}:${6:00} - ${7:${8:00}:${9:00}}}",
-            "$0"
+            "\t${4:${5:00}:${6:00} - ${7:${8:00}:${9:00}}} $0"
         ]
     },
     "Timespan": {
@@ -20,6 +21,6 @@
             "timespan",
             "ts"
         ],
-        "body": "${1:00}:${2:00} - ${3:${4:00}:${5:00}}"
+        "body": "${1:00}:${2:00} - ${3:${4:00}:${5:00}} $0"
     }
 }
