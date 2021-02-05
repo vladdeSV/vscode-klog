@@ -40,7 +40,7 @@
             {
                 "language": "klog",
                 "scopeName": "source.klog",
-                "path": "./syntaxes/klog.tmLanguage.json"
+                "path": "./syntaxes/klog.json"
             }
         ],
         "snippets": [
