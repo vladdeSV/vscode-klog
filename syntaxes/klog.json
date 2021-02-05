@@ -6,6 +6,16 @@
             "name": "keyword.other.tag.klog",
             "match": "#[a-zA-Z\\d_]+"
         },
+        "summary-behind-entry": {
+            "name": "string.unquoted.summary.behind-entry.klog",
+            "begin": "\\G",
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#tag"
+                }
+            ]
+        },
         "timespan": {
             "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
             "beginCaptures": {
@@ -16,10 +26,7 @@
             "end": "$",
             "patterns": [
                 {
-                    "name": "string.unquoted.summary.behind-entry.klog"
-                },
-                {
-                    "include": "#tag"
+                    "include": "#summary-behind-entry"
                 }
             ]
         },
@@ -33,10 +40,7 @@
             "end": "$",
             "patterns": [
                 {
-                    "name": "string.unquoted.summary.behind-entry.klog"
-                },
-                {
-                    "include": "#tag"
+                    "include": "#summary-behind-entry"
                 }
             ]
         },
@@ -53,10 +57,7 @@
             "end": "$",
             "patterns": [
                 {
-                    "name": "string.unquoted.summary.behind-entry.klog"
-                },
-                {
-                    "include": "#tag"
+                    "include": "#summary-behind-entry"
                 }
             ]
         }
