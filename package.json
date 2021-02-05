@@ -4,6 +4,7 @@
     "description": "Highlight and helper for Klog",
     "version": "0.1.0",
     "license": "MIT",
+    "publisher": "vladdeSV",
     "engines": {
         "vscode": "^1.52.0"
     },
