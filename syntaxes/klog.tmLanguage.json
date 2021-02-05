@@ -79,6 +79,10 @@
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
                         {
+                            "name": "invalid.illegal",
+                            "match": "^ \\w"
+                        },
+                        {
                             "include": "#tag"
                         }
                     ]
