@@ -80,7 +80,7 @@
                     "end": "(?=^$|^(?: {2,4}|\t))",
                     "patterns": [
                         {
-                            "name": "invalid.illegal",
+                            "name": "invalid.illegal.summary.whitespace-prefix.klog",
                             "match": "^ \\w"
                         },
                         {
@@ -96,10 +96,10 @@
                             "match": "(<)\\d\\d:\\d\\d(>)",
                             "captures": {
                                 "1": {
-                                    "name": "invalid.illegal"
+                                    "name": "invalid.illegal.timespan.arrow.klog"
                                 },
                                 "2": {
-                                    "name": "invalid.illegal"
+                                    "name": "invalid.illegal.timespan.arrow.klog"
                                 }
                             }
                         },
