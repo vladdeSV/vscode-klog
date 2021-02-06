@@ -29,7 +29,6 @@
             {
                 "id": "klog",
                 "aliases": [
-                    "Klog",
                     "klog"
                 ],
                 "extensions": [

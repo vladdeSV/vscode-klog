@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-    "name": "Klog",
+    "name": "klog",
     "repository": {
         "tag": {
             "name": "keyword.other.tag.klog",
