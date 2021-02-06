@@ -17,7 +17,7 @@
             ]
         },
         "timespan": {
-            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
+            "begin": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
             "beginCaptures": {
                 "1": {
                     "name": "markup.other.timespan.klog"
@@ -31,7 +31,7 @@
             ]
         },
         "timespan-open-ended": {
-            "begin": "(?<=^(?:\t| {2,4}))((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*\\?)\\s",
+            "begin": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?\\?)\\s",
             "beginCaptures": {
                 "1": {
                     "name": "markup.other.timespan.open-ended.klog"
@@ -45,7 +45,7 @@
             ]
         },
         "duration": {
-            "begin": "(?<=^(?:\t| {2,4}))(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))\\s",
+            "begin": "(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))\\s",
             "beginCaptures": {
                 "1": {
                     "name": "markup.other.duration.positive.klog"
@@ -93,7 +93,7 @@
                     "end": "$",
                     "patterns": [
                         {
-                            "match": "(<)\\d\\d:\\d\\d(>)",
+                            "match": "(<)\\d?\\d:\\d\\d(>)",
                             "captures": {
                                 "1": {
                                     "name": "invalid.illegal.timespan.arrow.klog"
