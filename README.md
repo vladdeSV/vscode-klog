@@ -1,5 +1,5 @@
 # vscode-klog
-Syntax and snippet support for [Klog](https://github.com/jotaen/klog) in VS Code.
+Syntax and snippet support for [klog](https://github.com/jotaen/klog) in VS Code.
 
 ![demo](/resource/vscode-klog.gif)
 
