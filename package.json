@@ -1,8 +1,8 @@
 {
     "name": "vscode-klog",
-    "displayName": "Klog syntax and snippets",
-    "description": "Klog helper",
-    "version": "0.1.1",
+    "displayName": "klog syntax and snippets",
+    "description": "klog helper",
+    "version": "0.1.2",
     "license": "MIT",
     "publisher": "vladdeSV",
     "engines": {
