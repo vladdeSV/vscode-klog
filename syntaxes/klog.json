@@ -4,7 +4,7 @@
     "repository": {
         "tag": {
             "name": "keyword.other.tag.klog",
-            "match": "#[a-zA-Z\\d_]+"
+            "match": "#[\\p{L}\\d_]+"
         },
         "summary-behind-entry": {
             "name": "string.unquoted.summary.behind-entry.klog",
@@ -17,53 +17,25 @@
             ]
         },
         "timespan": {
-            "begin": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?))\\s",
-            "beginCaptures": {
-                "1": {
-                    "name": "markup.other.timespan.klog"
-                }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "include": "#summary-behind-entry"
-                }
-            ]
+            "name": "markupk.other.timespan.klog",
+            "match": "(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)"
         },
         "timespan-open-ended": {
-            "begin": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?\\?)\\s",
-            "beginCaptures": {
-                "1": {
-                    "name": "markup.other.timespan.open-ended.klog"
-                }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "include": "#summary-behind-entry"
-                }
-            ]
+            "name": "markup.other.timespan.open-ended.klog",
+            "match": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?\\?)"
         },
         "duration": {
-            "begin": "(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))\\s",
-            "beginCaptures": {
+            "match": "(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m))|(-(?:\\d+h\\d+m|\\d+h|\\d+m)))",
+            "captures": {
                 "1": {
                     "name": "markup.other.duration.positive.klog"
                 },
                 "2": {
                     "name": "markup.other.duration.negative.klog"
                 }
-            },
-            "end": "$",
-            "patterns": [
-                {
-                    "include": "#summary-behind-entry"
-                }
-            ]
-        }
-    },
-    "patterns": [
-        {
+            }
+        },
+        "record": {
             "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\\\\\d{2}\\\\\\d{2})(?:\\s+\\((\\d+h\\d+m|\\d+h|\\d+m)!\\))?",
             "beginCaptures": {
                 "1": {
@@ -93,17 +65,6 @@
                     "end": "$",
                     "patterns": [
                         {
-                            "match": "(<)\\d?\\d:\\d\\d(>)",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.illegal.timespan.arrow.klog"
-                                },
-                                "2": {
-                                    "name": "invalid.illegal.timespan.arrow.klog"
-                                }
-                            }
-                        },
-                        {
                             "include": "#timespan"
                         },
                         {
@@ -111,11 +72,26 @@
                         },
                         {
                             "include": "#duration"
+                        },
+                        {
+                            "name": "string.unquoted.summary.behind-entry.klog",
+                            "begin": " +",
+                            "end": "$",
+                            "patterns": [
+                                {
+                                    "include": "#tag"
+                                }
+                            ]
                         }
                     ]
                 }
             ],
             "end": "^\\s*$"
+        }
+    },
+    "patterns": [
+        {
+            "include": "#record"
         }
     ],
     "scopeName": "source.klog"
