@@ -47,7 +47,7 @@
             "name": "markup.other.duration.positive.klog"
         },
         "record": {
-            "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\\\\\d{2}\\\\\\d{2})(?:\\s+\\((\\d+h\\d+m|\\d+h|\\d+m)!\\))?",
+            "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\/\\d{2}\\/\\d{2})(?:\\s+\\((\\d+h\\d+m|\\d+h|\\d+m)!\\))?",
             "beginCaptures": {
                 "1": {
                     "name": "markup.heading.date.klog"
