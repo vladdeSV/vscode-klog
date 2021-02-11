@@ -8,8 +8,8 @@
         },
         "summary-under-date": {
             "name": "string.unquoted.summary.after-date.klog",
-            "begin": "\\G",
-            "end": "(?=^\\s*$|^(?: {2,4}|\t))",
+            "begin": "^(?=\\p{L})",
+            "end": "$",
             "patterns": [
                 {
                     "name": "invalid.illegal.summary.whitespace-prefix.klog",
