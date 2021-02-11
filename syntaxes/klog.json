@@ -47,16 +47,37 @@
             "name": "markup.other.duration.positive.klog"
         },
         "record": {
-            "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\/\\d{2}\\/\\d{2})(?:\\s+\\((\\d+h\\d+m|\\d+h|\\d+m)!\\))?",
+            "begin": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}\\/\\d{2}\\/\\d{2})",
             "beginCaptures": {
                 "1": {
                     "name": "markup.heading.date.klog"
-                },
-                "2": {
-                    "name": "markup.other.duration.should-total.klog"
                 }
             },
             "patterns": [
+                {
+                    "begin": "(\\()",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control"
+                        }
+                    },
+                    "end": "(\\))|$",
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "match": "(?<=\\G|,)(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m)))",
+                            "captures": {
+                                "1": {
+                                    "name": "keyword.other.property.should-total.klog"
+                                }
+                            }
+                        }
+                    ]
+                },
                 {
                     "include": "#summary-under-date"
                 },
