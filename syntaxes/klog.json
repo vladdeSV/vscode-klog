@@ -31,7 +31,7 @@
             ]
         },
         "timespan": {
-            "name": "markupk.other.timespan.klog",
+            "name": "markup.other.timespan.klog",
             "match": "(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)"
         },
         "timespan-open-ended": {
@@ -58,13 +58,13 @@
                     "begin": "(?<=\\G\\s+)(\\()",
                     "beginCaptures": {
                         "1": {
-                            "name": "keyword.control"
+                            "name": "keyword.control.properties-paren.klog"
                         }
                     },
                     "end": "(\\))|$",
                     "endCaptures": {
                         "1": {
-                            "name": "keyword.control"
+                            "name": "keyword.control.properties-paren.klog"
                         }
                     },
                     "patterns": [
