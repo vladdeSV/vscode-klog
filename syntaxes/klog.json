@@ -70,7 +70,7 @@
                     },
                     "patterns": [
                         {
-                            "match": "(?<=\\G|,)(?:(\\+?(?:\\d+h\\d+m|\\d+h|\\d+m)))",
+                            "match": "(?<=\\G|,)(?:([+-]?(?:\\d+h\\d+m|\\d+h|\\d+m)!))",
                             "captures": {
                                 "1": {
                                     "name": "keyword.other.property.should-total.klog"
