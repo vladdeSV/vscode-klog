@@ -23,7 +23,7 @@
         },
         "summary-behind-entry": {
             "name": "string.unquoted.summary.behind-entry.klog",
-            "begin": "(?<!\t| {2,4})(?<= +)",
+            "begin": "(?<!\t| {2,4})(?<=\\s+)",
             "end": "$",
             "patterns": [
                 {
@@ -33,7 +33,7 @@
         },
         "timespan": {
             "name": "markup.other.timespan.klog",
-            "match": "(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)"
+            "match": "(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)"
         },
         "timespan-open-ended": {
             "name": "markup.other.timespan.open-ended.klog",
