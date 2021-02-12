@@ -9,7 +9,7 @@
         },
         "summary-under-date": {
             "name": "string.unquoted.summary.after-date.klog",
-            "begin": "^(?=\\p{L}| \\w)",
+            "begin": "^(?= ?\\p{L})",
             "end": "$",
             "patterns": [
                 {
@@ -106,7 +106,7 @@
                             "name": "invalid.illegal.missing-duration-or-time-span.klog"
                         },
                         {
-                            "match": "([^ ]*)(?: |$)",
+                            "match": "\\G(?<!\\S)(\\p{L}*)(?:\\s|$)",
                             "captures": {
                                 "1": {
                                     "name": "invalid.illegal.missing-spacing-after-entry.klog"
