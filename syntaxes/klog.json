@@ -8,12 +8,12 @@
         },
         "summary-under-date": {
             "name": "string.unquoted.summary.after-date.klog",
-            "begin": "^(?=\\p{L})",
+            "begin": "^(?=\\p{L}| \\w)",
             "end": "$",
             "patterns": [
                 {
                     "name": "invalid.illegal.summary.whitespace-prefix.klog",
-                    "match": "^ ."
+                    "match": "(?<=^ )."
                 },
                 {
                     "include": "#tag"
@@ -22,7 +22,7 @@
         },
         "summary-behind-entry": {
             "name": "string.unquoted.summary.behind-entry.klog",
-            "begin": "(?<= +)",
+            "begin": "(?<!\t| {2,4})(?<= +)",
             "end": "$",
             "patterns": [
                 {
@@ -55,7 +55,7 @@
             },
             "patterns": [
                 {
-                    "begin": "(\\()",
+                    "begin": "(?<=\\G\\s+)(\\()",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.control"
@@ -99,6 +99,10 @@
                         },
                         {
                             "include": "#summary-behind-entry"
+                        },
+                        {
+                            "match": "\\G.*",
+                            "name": "invalid.illegal.missing-duration-or-time-span.klog"
                         },
                         {
                             "match": "([^ ]*)(?: |$)",
