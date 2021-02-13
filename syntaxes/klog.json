@@ -13,10 +13,6 @@
             "end": "$",
             "patterns": [
                 {
-                    "name": "invalid.illegal.summary.whitespace-prefix.klog",
-                    "match": "(?<=^ )."
-                },
-                {
                     "include": "#tag"
                 }
             ]
@@ -81,6 +77,15 @@
                 },
                 {
                     "include": "#summary-under-date"
+                },
+                {
+                    "name": "invalid.illegal.summary.after-date.whitespace-prefix.klog",
+                    "match": "(?<=^ ).(.*$)",
+                    "captures": {
+                        "1": {
+                            "name": "string.unquoted.summary.after-date.klo"
+                        }
+                    }
                 },
                 {
                     "begin": "^(?:\t| {2,4})",
