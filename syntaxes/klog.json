@@ -9,7 +9,7 @@
         },
         "summary-under-date": {
             "name": "string.unquoted.summary.after-date.klog",
-            "begin": "^(?= ?\\p{L})",
+            "begin": "^(?=\\S)",
             "end": "$",
             "patterns": [
                 {
