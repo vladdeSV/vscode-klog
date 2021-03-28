@@ -35,6 +35,16 @@
             "name": "markup.other.timespan.open-ended.klog",
             "match": "((<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?) ?- ?\\?+)"
         },
+        "duration": {
+            "patterns": [
+                {
+                    "include": "#duration-positive"
+                },
+                {
+                    "include": "#duration-negative"
+                }
+            ]
+        },
         "duration-negative": {
             "match": "-(?:\\d+h\\d+m|\\d+h|\\d+m)",
             "name": "markup.other.duration.negative.klog"
@@ -98,10 +108,7 @@
                             "include": "#timespan-open-ended"
                         },
                         {
-                            "include": "#duration-positive"
-                        },
-                        {
-                            "include": "#duration-negative"
+                            "include": "#duration"
                         },
                         {
                             "include": "#summary-behind-entry"
