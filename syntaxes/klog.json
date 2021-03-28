@@ -107,10 +107,6 @@
                             "include": "#summary-behind-entry"
                         },
                         {
-                            "match": "\\G.*",
-                            "name": "invalid.illegal.missing-duration-or-time-span.klog"
-                        },
-                        {
                             "match": "\\G(?<!\\S)(\\p{L}*)(?:\\s|$)",
                             "captures": {
                                 "1": {
