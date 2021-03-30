@@ -11,9 +11,9 @@
             "record"
         ],
         "body": [
-            "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE${1: (${2:duration}!)}",
-            "${3:summary}",
-            "\t${4:${5:$CURRENT_HOUR}:${6:$CURRENT_MINUTE} - ${7:${8:$CURRENT_HOUR}:${9:$CURRENT_MINUTE}}} $0"
+            "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+            "${1:Summary}",
+            "    $0"
         ]
     },
     "Timespan": {
@@ -21,7 +21,7 @@
             "timespan",
             "ts"
         ],
-        "body": "${1:$CURRENT_HOUR}:${2:$CURRENT_MINUTE} - ${3:${4:$CURRENT_HOUR}:${5:$CURRENT_MINUTE}} $0"
+        "body": "${1:$CURRENT_HOUR}:${2:$CURRENT_MINUTE} - ${3:$CURRENT_HOUR}:${4:$CURRENT_MINUTE} $0"
     },
     "Should-total": {
         "prefix": [
