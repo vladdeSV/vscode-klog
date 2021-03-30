@@ -19,7 +19,7 @@
         },
         "summary-behind-entry": {
             "name": "string.unquoted.summary.behind-entry.klog",
-            "begin": "(?<!^(?:\t| {2,4}))(?<=\\s+)",
+            "begin": "(?<=-\\s*<?\\d?\\d:\\d\\d([ap]m)?>? |\\d+[hm] |-\\s*\\? )",
             "end": "$",
             "patterns": [
                 {
