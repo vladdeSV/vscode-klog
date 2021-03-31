@@ -1,0 +1,1 @@
+vsce package --githubBranch=main
