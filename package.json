@@ -5,7 +5,7 @@
     "version": "1.0.0-rc.4",
     "license": "MIT",
     "publisher": "vladdeSV",
-    "icon": "resource/klog-icon.png",
+    "icon": "resource/vscode-klog-icon.png",
     "engines": {
         "vscode": "^1.52.0"
     },
