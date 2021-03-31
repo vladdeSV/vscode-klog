@@ -1,4 +1,4 @@
-<h1><img alt="klog icon" src="https://raw.githubusercontent.com/vladdeSV/vscode-klog/main/resource/klog%20icon.png" width="200"></h1>
+<h1><img alt="klog icon" src="https://raw.githubusercontent.com/vladdeSV/vscode-klog/main/resource/readme-klog-icon.png"></h1>
 
 Syntax and snippet support for [klog](https://github.com/jotaen/klog) in VS Code.
 
