@@ -2,9 +2,10 @@
     "name": "vscode-klog",
     "displayName": "klog syntax and snippets",
     "description": "klog helper",
-    "version": "1.0.0-rc.3",
+    "version": "1.0.0-rc.5",
     "license": "MIT",
     "publisher": "vladdeSV",
+    "icon": "resource/klog-icon.png",
     "engines": {
         "vscode": "^1.52.0"
     },
