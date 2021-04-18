@@ -1,0 +1,19 @@
+{
+    "name": "vscode-klog-server",
+    "description": "Language server for klog.",
+    "version": "0.0.0",
+    "author": "Vladimirs Nordholm",
+    "license": "MIT",
+    "engines": {
+        "node": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vladdeSV/vscode-klog"
+    },
+    "dependencies": {
+        "vscode-languageserver": "^7.0.0",
+        "vscode-languageserver-textdocument": "^1.0.1"
+    },
+    "scripts": {}
+}
