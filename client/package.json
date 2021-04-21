@@ -1,0 +1,24 @@
+{
+	"name": "vscode-klog-client",
+	"description": "VSCode part of a language server",
+	"author": "Vladimirs Nordholm",
+	"license": "MIT",
+	"version": "0.0.0",
+	"publisher": "vladdeSV",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vladdeSV/vscode-klog"
+	},
+	"engines": {
+		"vscode": "^1.52.0"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^7.0.0"
+	},
+	"devDependencies": {
+		"@types/mocha": "^8.2.2",
+		"@types/node": "^14.14.41",
+		"@types/vscode": "^1.52.0",
+		"vscode-test": "^1.3.0"
+	}
+}

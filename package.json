@@ -49,6 +49,22 @@
                 "language": "klog",
                 "path": "./snippets/klog.json"
             }
-        ]
-    }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Example configuration",
+            "properties": {
+                "languageServerExample.maxNumberOfProblems": {
+                    "scope": "resource",
+                    "type": "number",
+                    "default": 100,
+                    "description": "Controls the maximum number of problems produced by the server."
+                }
+            }
+        }
+    },
+    "main": "./client/out/extension",
+    "activationEvents": [
+        "onLanguage:klog"
+    ]
 }
