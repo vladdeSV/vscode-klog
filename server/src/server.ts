@@ -14,12 +14,14 @@ import {
     CompletionItemKind,
     TextDocumentPositionParams,
     TextDocumentSyncKind,
-    InitializeResult
+    InitializeResult,
+    Position
 } from 'vscode-languageserver/node';
 
 import {
     TextDocument
 } from 'vscode-languageserver-textdocument';
+import { JsonOutput } from './klog';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -136,17 +138,36 @@ documents.onDidChangeContent(change => {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+
+    const { stdout } = await exec('%USERPROFILE%\\klog.exe json %USERPROFILE%\\time.klg');
+    const json: JsonOutput = JSON.parse(stdout)
+    let errors = json.errors
+
+    if (errors === null) {
+        errors = []
+    }
+
     const diagnostics: Diagnostic[] = [];
-    const diagnostic: Diagnostic = {
-        severity: DiagnosticSeverity.Warning,
-        range: {
-            start: textDocument.positionAt(14),
-            end: textDocument.positionAt(14 + 3)
-        },
-        message: `Test.`,
-        source: 'klog'
-    };
-    diagnostics.push(diagnostic);
+    for (const error of errors) {
+        const diagnostic: Diagnostic = {
+            severity: DiagnosticSeverity.Error,
+            range: {
+                start: Position.create(error.line - 1, error.column - 1),
+                end: Position.create(error.line - 1, error.column - 1 + error.length)
+            },
+            message: error.title,
+            source: 'klog'
+        };
+        diagnostics.push(diagnostic);
+    }
+
+    console.log(`sent ${diagnostics.length} items`);
+    for (const d of diagnostics) {
+        console.log(d.range.start);
+    }
+
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 
     // // In this simple example we get the settings for every validate run.
