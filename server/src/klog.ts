@@ -2,7 +2,7 @@ export interface KlogSettings {
     klogPath: string,
 }
 
-export type Error = {
+export type KlogError = {
     line: number,
     column: number,
     length: number,
@@ -35,9 +35,9 @@ type EntryDuration = {
     type: 'duration'
 }
 
-export type Entry = EntryCommon | EntryRange | EntryRangeOpen | EntryDuration;
+export type KlogEntry = EntryCommon | EntryRange | EntryRangeOpen | EntryDuration;
 
-export type Record = {
+export type KlogRecord = {
     date: string,
     summary: string,
     total: string,
@@ -47,17 +47,17 @@ export type Record = {
     diff: string,
     diff_mins: number,
     tags: string[],
-    entries: Entry[]
+    entries: KlogEntry[]
 }
 
 type JsonSuccess = {
-    records: Record[],
+    records: KlogRecord[],
     errors: null
 }
 
 type JsonError = {
     records: null,
-    errors: Error[]
+    errors: KlogError[]
 }
 
-export type JsonOutput = JsonSuccess | JsonError
+export type KlogJsonOutput = JsonSuccess | JsonError
