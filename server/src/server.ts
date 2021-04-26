@@ -120,7 +120,6 @@ documents.onDidChangeContent(change => {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
-    // // In this simple example we get the settings for every validate run.
     const settings = await getDocumentSettings(textDocument.uri);
     const klogExecutable = settings.klogPath
     if (!klogExecutable) {
