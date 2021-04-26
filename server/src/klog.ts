@@ -1,3 +1,7 @@
+export interface KlogSettings {
+    klogPath: string,
+}
+
 export type Error = {
     line: number,
     column: number,

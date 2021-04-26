@@ -1,7 +1,6 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
+import * as fs from 'fs';
+import { TextDocument } from 'vscode-languageserver-textdocument';
+import { JsonOutput, KlogSettings } from './klog';
 import {
     createConnection,
     TextDocuments,
@@ -10,20 +9,11 @@ import {
     ProposedFeatures,
     InitializeParams,
     DidChangeConfigurationNotification,
-    CompletionItem,
-    CompletionItemKind,
-    TextDocumentPositionParams,
     TextDocumentSyncKind,
     InitializeResult,
     Position
 } from 'vscode-languageserver/node';
 
-import { TextDocument } from 'vscode-languageserver-textdocument';
-import { JsonOutput } from './klog';
-import { writeSync } from 'fs';
-
-// Create a connection for the server, using Node's IPC as a transport.
-// Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager.
@@ -59,6 +49,7 @@ connection.onInitialize((params: InitializeParams) => {
             }
         }
     };
+
     if (hasWorkspaceFolderCapability) {
         result.capabilities.workspace = {
             workspaceFolders: {
@@ -81,17 +72,7 @@ connection.onInitialized(() => {
     }
 });
 
-// The example settings
-interface KlogSettings {
-    maxNumberOfProblems: number;
-}
-
-// The global settings, used when the `workspace/configuration` request is not supported by the client.
-// Please note that this is not the case when using this server with the client provided in this example
-// but could happen with other clients.
-const defaultSettings: KlogSettings = {
-    maxNumberOfProblems: 1000
-};
+const defaultSettings: KlogSettings = { klogPath: 'klog' };
 let globalSettings: KlogSettings = defaultSettings;
 
 // Cache the settings of all open documents
@@ -119,7 +100,7 @@ function getDocumentSettings(resource: string): Thenable<KlogSettings> {
     if (!result) {
         result = connection.workspace.getConfiguration({
             scopeUri: resource,
-            section: 'klogLanguageServer'
+            section: 'klog'
         });
         documentSettings.set(resource, result);
     }
@@ -140,16 +121,33 @@ documents.onDidChangeContent(change => {
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
     // // In this simple example we get the settings for every validate run.
-    // const settings = await getDocumentSettings(textDocument.uri);
+    const settings = await getDocumentSettings(textDocument.uri);
+    const klogExecutable = settings.klogPath
+    if (!klogExecutable) {
+        return;
+    }
+
+    if (!fs.existsSync(klogExecutable)) {
+        const diagnostics: Diagnostic[] = [
+            {
+                range: {
+                    start: Position.create(0, 0),
+                    end: Position.create(0, 99)
+                },
+                message: `Invalid klog path '${klogExecutable}'`
+            }
+        ]
+        connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+        return
+    }
 
     const tmp = require('tmp');
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-    const klogExecutable = '%USERPROFILE%\\klog.exe' // fixme get from settings
 
     const tempFile = tmp.fileSync();
-    writeSync(tempFile.fd, textDocument.getText())
+    fs.writeSync(tempFile.fd, textDocument.getText())
 
     const { stdout } = await exec(`${klogExecutable} json ${tempFile.name}`);
     const json: JsonOutput = JSON.parse(stdout)
@@ -171,7 +169,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
             source: 'klog'
         };
 
-        // todo why does this check exist?
         if (hasDiagnosticRelatedInformationCapability) {
             diagnostic.relatedInformation = [
                 {
@@ -192,42 +189,5 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     tempFile.removeCallback();
 }
 
-connection.onDidChangeWatchedFiles(_change => {
-    // Monitored files have change in VSCode
-    connection.console.log('We received an file change event');
-});
-
-// This handler provides the initial list of the completion items.
-connection.onCompletion(
-    (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-        // The pass parameter contains the position of the text document in
-        // which code complete got requested. For the example we ignore this
-        // info and always provide the same completion items.
-        return [
-            // {
-            //     label: 'Item',
-            //     kind: CompletionItemKind.Text,
-            //     data: 1
-            // },
-        ];
-    }
-);
-
-// This handler resolves additional information for the item selected in
-// the completion list.
-connection.onCompletionResolve(
-    (item: CompletionItem): CompletionItem => {
-        // if (item.data === 1) {
-        //     item.detail = 'Item details';
-        //     item.documentation = 'Item documentation';
-        // }
-        return item;
-    }
-);
-
-// Make the text document manager listen on the connection
-// for open, change and close text document events
 documents.listen(connection);
-
-// Listen on the connection
 connection.listen();
