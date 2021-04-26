@@ -144,7 +144,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-
     const tempFile = tmp.fileSync();
     fs.writeSync(tempFile.fd, textDocument.getText())
 

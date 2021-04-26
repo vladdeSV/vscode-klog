@@ -62,7 +62,7 @@
                     "default": "klog"
                 }
             }
-        },
+        }
     },
     "main": "./client/out/extension",
     "activationEvents": [
