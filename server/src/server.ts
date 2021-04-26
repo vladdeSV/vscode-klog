@@ -18,10 +18,9 @@ import {
     Position
 } from 'vscode-languageserver/node';
 
-import {
-    TextDocument
-} from 'vscode-languageserver-textdocument';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { JsonOutput } from './klog';
+import { writeSync } from 'fs';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -138,13 +137,19 @@ documents.onDidChangeContent(change => {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
+    const tmp = require('tmp');
     const util = require('util');
     const exec = util.promisify(require('child_process').exec);
 
-    const { stdout } = await exec('%USERPROFILE%\\klog.exe json %USERPROFILE%\\time.klg');
-    const json: JsonOutput = JSON.parse(stdout)
-    let errors = json.errors
+    const klogExecutable = '%USERPROFILE%\\klog.exe' // fixme get from settings
 
+    const tempFile = tmp.fileSync();
+    writeSync(tempFile.fd, textDocument.getText())
+
+    const { stdout } = await exec(`${klogExecutable} json ${tempFile.name}`);
+    const json: JsonOutput = JSON.parse(stdout)
+
+    let errors = json.errors
     if (errors === null) {
         errors = []
     }
@@ -163,12 +168,10 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
         diagnostics.push(diagnostic);
     }
 
-    console.log(`sent ${diagnostics.length} items`);
-    for (const d of diagnostics) {
-        console.log(d.range.start);
-    }
-
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+
+    tempFile.removeCallback();
+
 
     // // In this simple example we get the settings for every validate run.
     // const settings = await getDocumentSettings(textDocument.uri);
