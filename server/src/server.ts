@@ -168,7 +168,7 @@ connection.onDidChangeConfiguration(change => {
         documentSettings.clear();
     } else {
         globalSettings = <KlogSettings>(
-            (change.settings.languageServerExample || defaultSettings)
+            (change.settings.klog || defaultSettings)
         );
     }
 
@@ -176,17 +176,13 @@ connection.onDidChangeConfiguration(change => {
     documents.all().forEach(validateTextDocument);
 });
 
-// Only keep settings for open documents
 documents.onDidClose(e => {
     documentSettings.delete(e.document.uri);
 });
 
-// The content of a text document has changed. This event is emitted
-// when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
     validateTextDocument(change.document);
 });
-
 
 documents.listen(connection);
 connection.listen();
