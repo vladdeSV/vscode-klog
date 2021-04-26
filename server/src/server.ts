@@ -23,6 +23,96 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
+const defaultSettings: KlogSettings = { klogPath: 'klog' };
+let globalSettings: KlogSettings = defaultSettings;
+
+// Cache the settings of all open documents
+const documentSettings: Map<string, Thenable<KlogSettings>> = new Map();
+
+function getDocumentSettings(resource: string): Thenable<KlogSettings> {
+    if (!hasConfigurationCapability) {
+        return Promise.resolve(globalSettings);
+    }
+    let result = documentSettings.get(resource);
+    if (!result) {
+        result = connection.workspace.getConfiguration({
+            scopeUri: resource,
+            section: 'klog'
+        });
+        documentSettings.set(resource, result);
+    }
+    return result;
+}
+
+async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+
+    const settings = await getDocumentSettings(textDocument.uri);
+    const klogExecutable = settings.klogPath
+    if (!klogExecutable) {
+        return;
+    }
+
+    if (!fs.existsSync(klogExecutable)) {
+        const diagnostics: Diagnostic[] = [
+            {
+                range: {
+                    start: Position.create(0, 0),
+                    end: Position.create(0, 99)
+                },
+                message: `Invalid klog path '${klogExecutable}'`
+            }
+        ]
+        connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+        return
+    }
+
+    const tmp = require('tmp');
+    const util = require('util');
+    const exec = util.promisify(require('child_process').exec);
+
+    const tempFile = tmp.fileSync();
+    fs.writeSync(tempFile.fd, textDocument.getText())
+
+    const { stdout } = await exec(`"${klogExecutable}" json ${tempFile.name}`);
+    const json: JsonOutput = JSON.parse(stdout)
+
+    let errors = json.errors
+    if (errors === null) {
+        errors = []
+    }
+
+    const diagnostics: Diagnostic[] = [];
+    for (const error of errors) {
+        const diagnostic: Diagnostic = {
+            severity: DiagnosticSeverity.Error,
+            range: {
+                start: Position.create(error.line - 1, error.column - 1),
+                end: Position.create(error.line - 1, error.column - 1 + error.length)
+            },
+            message: error.title,
+            source: 'klog'
+        };
+
+        if (hasDiagnosticRelatedInformationCapability) {
+            diagnostic.relatedInformation = [
+                {
+                    location: {
+                        uri: textDocument.uri,
+                        range: Object.assign({}, diagnostic.range)
+                    },
+                    message: error.details
+                },
+            ];
+        }
+
+        diagnostics.push(diagnostic)
+    }
+
+    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+
+    tempFile.removeCallback();
+}
+
 connection.onInitialize((params: InitializeParams) => {
     const capabilities = params.capabilities;
 
@@ -72,12 +162,6 @@ connection.onInitialized(() => {
     }
 });
 
-const defaultSettings: KlogSettings = { klogPath: 'klog' };
-let globalSettings: KlogSettings = defaultSettings;
-
-// Cache the settings of all open documents
-const documentSettings: Map<string, Thenable<KlogSettings>> = new Map();
-
 connection.onDidChangeConfiguration(change => {
     if (hasConfigurationCapability) {
         // Reset all cached document settings
@@ -92,21 +176,6 @@ connection.onDidChangeConfiguration(change => {
     documents.all().forEach(validateTextDocument);
 });
 
-function getDocumentSettings(resource: string): Thenable<KlogSettings> {
-    if (!hasConfigurationCapability) {
-        return Promise.resolve(globalSettings);
-    }
-    let result = documentSettings.get(resource);
-    if (!result) {
-        result = connection.workspace.getConfiguration({
-            scopeUri: resource,
-            section: 'klog'
-        });
-        documentSettings.set(resource, result);
-    }
-    return result;
-}
-
 // Only keep settings for open documents
 documents.onDidClose(e => {
     documentSettings.delete(e.document.uri);
@@ -118,74 +187,6 @@ documents.onDidChangeContent(change => {
     validateTextDocument(change.document);
 });
 
-async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-
-    const settings = await getDocumentSettings(textDocument.uri);
-    const klogExecutable = settings.klogPath
-    if (!klogExecutable) {
-        return;
-    }
-
-    if (!fs.existsSync(klogExecutable)) {
-        const diagnostics: Diagnostic[] = [
-            {
-                range: {
-                    start: Position.create(0, 0),
-                    end: Position.create(0, 99)
-                },
-                message: `Invalid klog path '${klogExecutable}'`
-            }
-        ]
-        connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
-        return
-    }
-
-    const tmp = require('tmp');
-    const util = require('util');
-    const exec = util.promisify(require('child_process').exec);
-
-    const tempFile = tmp.fileSync();
-    fs.writeSync(tempFile.fd, textDocument.getText())
-
-    const { stdout } = await exec(`${klogExecutable} json ${tempFile.name}`);
-    const json: JsonOutput = JSON.parse(stdout)
-
-    let errors = json.errors
-    if (errors === null) {
-        errors = []
-    }
-
-    const diagnostics: Diagnostic[] = [];
-    for (const error of errors) {
-        const diagnostic: Diagnostic = {
-            severity: DiagnosticSeverity.Error,
-            range: {
-                start: Position.create(error.line - 1, error.column - 1),
-                end: Position.create(error.line - 1, error.column - 1 + error.length)
-            },
-            message: error.title,
-            source: 'klog'
-        };
-
-        if (hasDiagnosticRelatedInformationCapability) {
-            diagnostic.relatedInformation = [
-                {
-                    location: {
-                        uri: textDocument.uri,
-                        range: Object.assign({}, diagnostic.range)
-                    },
-                    message: error.details
-                },
-            ];
-        }
-
-        diagnostics.push(diagnostic)
-    }
-
-    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
-
-    tempFile.removeCallback();
-}
 
 documents.listen(connection);
 connection.listen();
