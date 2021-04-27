@@ -22,7 +22,10 @@ let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
 const documentSettings: Map<string, Thenable<KlogSettings>> = new Map();
-const defaultSettings: KlogSettings = { klogPath: 'klog' };
+const defaultSettings: KlogSettings = {
+    klogPath: 'klog',
+    validateOn: 'save'
+};
 let globalSettings: KlogSettings = defaultSettings;
 
 connection.onInitialize((params: InitializeParams) => {
@@ -92,7 +95,23 @@ documents.onDidClose(e => {
     documentSettings.delete(e.document.uri);
 });
 
-documents.onDidSave(change => {
+documents.onDidSave(async (change) => {
+
+    const settings = await getDocumentSettings(change.document.uri);
+    if (settings.validateOn !== 'save') {
+        return;
+    }
+
+    validateTextDocument(change.document);
+});
+
+documents.onDidChangeContent(async (change) => {
+
+    const settings = await getDocumentSettings(change.document.uri);
+    if (settings.validateOn !== 'edit') {
+        return;
+    }
+
     validateTextDocument(change.document);
 });
 
@@ -135,6 +154,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 }
 
 function isKlogExecutableValid(executable: string): boolean {
+
     if (!executable) {
         return false;
     }

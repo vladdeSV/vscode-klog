@@ -60,6 +60,19 @@
                     "scope": "resource",
                     "description": "Path to executable.",
                     "default": "klog"
+                },
+                "klog.validateOn": {
+                    "type": "string",
+                    "default": "save",
+                    "enum": [
+                        "save",
+                        "edit"
+                    ],
+                    "enumDescriptions": [
+                        "Validate after saving document",
+                        "Validate while typing"
+                    ],
+                    "description": "When document should be validated."
                 }
             }
         }

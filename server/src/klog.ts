@@ -1,5 +1,6 @@
 export interface KlogSettings {
     klogPath: string,
+    validateOn: 'save' | 'edit',
 }
 
 export type KlogError = {
