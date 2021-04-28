@@ -21,7 +21,7 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
-const documentSettings: Map<string, Thenable<KlogSettings>> = new Map();
+const documentSettingsMap: Map<string, Thenable<KlogSettings>> = new Map();
 const defaultSettings: KlogSettings = {
     klogPath: '',
     validateOn: 'save'
@@ -82,7 +82,7 @@ connection.onDidChangeConfiguration(change => {
 
     if (hasConfigurationCapability) {
         // Reset all cached document settings
-        documentSettings.clear();
+        documentSettingsMap.clear();
     } else {
         globalSettings = <KlogSettings>((change.settings.klog || defaultSettings));
     }
@@ -92,7 +92,7 @@ connection.onDidChangeConfiguration(change => {
 });
 
 documents.onDidClose(e => {
-    documentSettings.delete(e.document.uri);
+    documentSettingsMap.delete(e.document.uri);
 });
 
 documents.onDidSave(async (change) => {
@@ -122,13 +122,13 @@ function getDocumentSettings(resource: string): Thenable<KlogSettings> {
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);
     }
-    let result = documentSettings.get(resource);
+    let result = documentSettingsMap.get(resource);
     if (!result) {
         result = connection.workspace.getConfiguration({
             scopeUri: resource,
             section: 'klog'
         });
-        documentSettings.set(resource, result);
+        documentSettingsMap.set(resource, result);
     }
     return result;
 }
