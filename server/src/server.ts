@@ -23,7 +23,7 @@ let hasDiagnosticRelatedInformationCapability = false;
 
 const documentSettings: Map<string, Thenable<KlogSettings>> = new Map();
 const defaultSettings: KlogSettings = {
-    klogPath: 'klog',
+    klogPath: '',
     validateOn: 'save'
 };
 let globalSettings: KlogSettings = defaultSettings;
@@ -141,9 +141,16 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     let diagnostics: Diagnostic[];
 
     const validExecutable = isKlogExecutableValid(klogExecutable)
+
+    if (validExecutable === 'unset') {
+        connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: [] });
+        return;
+    }
+
     if (validExecutable) {
         diagnostics = await validateDocumentWithExecutable(klogExecutable, textDocument)
     } else {
+        // create default error message if klog binary cannot be found.
         diagnostics = [{
             range: { start: Position.create(0, 0), end: Position.create(0, 99) },
             message: `Invalid klog path '${klogExecutable}'`
@@ -153,17 +160,17 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
 }
 
-function isKlogExecutableValid(executable: string): boolean {
+function isKlogExecutableValid(executable: string): 'valid' | 'invalid' | 'unset' {
 
     if (!executable) {
-        return false;
+        return 'unset';
     }
 
     if (!fs.existsSync(executable)) {
-        return false
+        return 'invalid'
     }
 
-    return true
+    return 'valid'
 }
 
 async function validateDocumentWithExecutable(executablePath: string, textDocument: TextDocument): Promise<Diagnostic[]> {
