@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import { KlogError, KlogJsonOutput, KlogSettings } from './klog';
+import * as klog from './types';
 import {
     createConnection,
     TextDocuments,
@@ -21,12 +21,12 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
-const documentSettingsMap: Map<string, Thenable<KlogSettings>> = new Map();
-const defaultSettings: KlogSettings = {
+const documentSettingsMap: Map<string, Thenable<klog.Settings>> = new Map();
+const defaultSettings: klog.Settings = {
     klogPath: '',
     validateOn: 'save'
 };
-let globalSettings: KlogSettings = defaultSettings;
+let globalSettings: klog.Settings = defaultSettings;
 
 connection.onInitialize((params: InitializeParams) => {
     const capabilities = params.capabilities;
@@ -84,7 +84,7 @@ connection.onDidChangeConfiguration(change => {
         // Reset all cached document settings
         documentSettingsMap.clear();
     } else {
-        globalSettings = <KlogSettings>((change.settings.klog || defaultSettings));
+        globalSettings = <klog.Settings>((change.settings.klog || defaultSettings));
     }
 
     // Revalidate all open text documents
@@ -118,7 +118,7 @@ documents.onDidChangeContent(async (change) => {
 documents.listen(connection);
 connection.listen();
 
-function getDocumentSettings(resource: string): Thenable<KlogSettings> {
+function getDocumentSettings(resource: string): Thenable<klog.Settings> {
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);
     }
@@ -185,13 +185,13 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
     const { stdout } = await exec(`"${executablePath}" json ${tempFile.name}`)
     tempFile.removeCallback();
 
-    const json: KlogJsonOutput = JSON.parse(stdout)
+    const json: klog.JsonOutput = JSON.parse(stdout)
     const errors = json.errors ?? []
 
-    return errors.map((error: KlogError): Diagnostic => diagnosticFromKlogError(error, textDocument.uri));
+    return errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri));
 }
 
-function diagnosticFromKlogError(error: KlogError, uri: string): Diagnostic {
+function diagnosticFromKlogError(error: klog.Error, uri: string): Diagnostic {
     const diagnostic: Diagnostic = {
         severity: DiagnosticSeverity.Error,
         message: error.title,
