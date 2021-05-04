@@ -80,8 +80,5 @@
     "main": "./client/out/extension",
     "activationEvents": [
         "onLanguage:klog"
-    ],
-    "dependencies": {
-        "tmp": "^0.2.1"
-    }
+    ]
 }
