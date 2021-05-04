@@ -177,35 +177,18 @@ function isKlogExecutableValid(executable: string): 'valid' | 'invalid' | 'unset
 async function validateDocumentWithExecutable(executablePath: string, textDocument: TextDocument): Promise<Diagnostic[]> {
 
     const child = spawn(`"${executablePath}" json`, { shell: true });
-
-    if (!child.stdout) {
-        console.log('stdout is <REDACTED>');
-        return []
-    }
-    console.log('stdout is a OK');
-
-    const a = child.stdout.on("data", (b) => {
-        console.log(b.toString());
-    });
-    console.log(a)
-
-    if (!child.stdin) {
-        console.log('stdin is <REDACTED>');
-        return []
-    }
-    console.log('stdin is a OK');
-
     child.stdin.write(textDocument.getText());
     child.stdin.end();
 
+    const data = await new Promise<string>(async (resolve, reject) => {
+        child.stdout.on("data", buffer => resolve(buffer.toString()))
+    })
 
-
-
-
-    const json: klog.JsonOutput = JSON.parse("{}")
+    const json: klog.JsonOutput = JSON.parse(data)
     const errors = json.errors ?? []
+    const diagnostics: Diagnostic[] = errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri))
 
-    return errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri));
+    return diagnostics
 }
 
 function diagnosticFromKlogError(error: klog.Error, uri: string): Diagnostic {
