@@ -13,6 +13,7 @@ import {
     InitializeResult,
     Position
 } from 'vscode-languageserver/node';
+import { spawn } from 'child_process';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
@@ -174,18 +175,34 @@ function isKlogExecutableValid(executable: string): 'valid' | 'invalid' | 'unset
 }
 
 async function validateDocumentWithExecutable(executablePath: string, textDocument: TextDocument): Promise<Diagnostic[]> {
-    const tmp = require('tmp')
-    const util = require('util')
-    const exec = util.promisify(require('child_process').exec)
 
-    // fixme: this is a hack until klog supports piping.
-    //        add warning if on windows and <2.2?
-    const tempFile = tmp.fileSync();
-    fs.writeSync(tempFile.fd, textDocument.getText())
-    const { stdout } = await exec(`"${executablePath}" json ${tempFile.name}`)
-    tempFile.removeCallback();
+    const child = spawn(`"${executablePath}" json`, { shell: true });
 
-    const json: klog.JsonOutput = JSON.parse(stdout)
+    if (!child.stdout) {
+        console.log('stdout is <REDACTED>');
+        return []
+    }
+    console.log('stdout is a OK');
+
+    const a = child.stdout.on("data", (b) => {
+        console.log(b.toString());
+    });
+    console.log(a)
+
+    if (!child.stdin) {
+        console.log('stdin is <REDACTED>');
+        return []
+    }
+    console.log('stdin is a OK');
+
+    child.stdin.write(textDocument.getText());
+    child.stdin.end();
+
+
+
+
+
+    const json: klog.JsonOutput = JSON.parse("{}")
     const errors = json.errors ?? []
 
     return errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri));
