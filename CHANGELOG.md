@@ -13,3 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Syntax highlighting
 - Snippets for common actions
+    - Date, `date`
+    - Record, `record`
+    - Timespan, `ts`/`timespan`
+    - Should-total, `st`/`should-total`
