@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Open-ended timespan snippet (`tsoe`/`timespan-open-ended`)
 - Changelog, retroactively
 
 ## [1.0.0] - 2021-04-06
