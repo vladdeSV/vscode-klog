@@ -47,6 +47,7 @@
         "snippets": [
             {
                 "language": "klog",
+                "scopeName": "source.klog",
                 "path": "./snippets/klog.json"
             }
         ]
