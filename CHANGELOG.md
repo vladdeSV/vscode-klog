@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Open-ended timespan snippet (`tsoe`/`timespan-open-ended`)
+- Add snippets
+    - Open-ended timespan snippet, `tsoe`/`timespan-open-ended`
+    - Current time, `time`
 - Changelog, retroactively
 
 ## [1.0.0] - 2021-04-06
