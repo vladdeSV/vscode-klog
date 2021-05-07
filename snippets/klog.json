@@ -16,6 +16,10 @@
             "    $0"
         ]
     },
+    "Current time": {
+        "prefix": "time",
+        "body": "${1:$CURRENT_HOUR}:${2:$CURRENT_MINUTE}"
+    },
     "Timespan": {
         "prefix": [
             "timespan",
