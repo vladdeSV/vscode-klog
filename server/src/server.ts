@@ -31,6 +31,7 @@ const defaultSettings: klog.Settings = {
 let globalSettings: klog.Settings = defaultSettings;
 
 connection.onInitialize((params: InitializeParams) => {
+
     const capabilities = params.capabilities;
 
     // Does the client support the `workspace/configuration` request?
@@ -107,6 +108,7 @@ documents.onDidChangeContent(async (change) => {
 });
 
 async function foo(change: TextDocumentChangeEvent<TextDocument>, type: klog.ValidateOnMode) {
+
     const settings = await getDocumentSettings(change.document.uri);
     if (settings.validateOn !== type) {
         return;
@@ -116,6 +118,7 @@ async function foo(change: TextDocumentChangeEvent<TextDocument>, type: klog.Val
 }
 
 function getDocumentSettings(resource: string): Thenable<klog.Settings> {
+
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);
     }
@@ -188,6 +191,7 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
 }
 
 function diagnosticFromKlogError(error: klog.Error, uri: string): Diagnostic {
+
     const diagnostic: Diagnostic = {
         severity: DiagnosticSeverity.Error,
         message: error.title,
