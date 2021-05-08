@@ -12,7 +12,8 @@ import {
     DidChangeConfigurationNotification,
     TextDocumentSyncKind,
     InitializeResult,
-    Position
+    Position,
+    TextDocumentChangeEvent
 } from 'vscode-languageserver/node';
 
 const connection = createConnection(ProposedFeatures.all);
@@ -98,23 +99,21 @@ documents.onDidClose(e => {
 
 documents.onDidSave(async (change) => {
 
-    const settings = await getDocumentSettings(change.document.uri);
-    if (settings.validateOn !== 'save') {
-        return;
-    }
-
-    validateTextDocument(change.document);
+    foo(change, 'save')
 });
 
 documents.onDidChangeContent(async (change) => {
+    foo(change, 'edit')
+});
 
+async function foo(change: TextDocumentChangeEvent<TextDocument>, type: klog.ValidateOnMode) {
     const settings = await getDocumentSettings(change.document.uri);
-    if (settings.validateOn !== 'edit') {
+    if (settings.validateOn !== type) {
         return;
     }
 
     validateTextDocument(change.document);
-});
+}
 
 function getDocumentSettings(resource: string): Thenable<klog.Settings> {
     if (!hasConfigurationCapability) {

@@ -1,6 +1,8 @@
+export type ValidateOnMode = 'save' | 'edit'
+
 export interface Settings {
     klogPath: string,
-    validateOn: 'save' | 'edit',
+    validateOn: ValidateOnMode,
 }
 
 export type Error = {
