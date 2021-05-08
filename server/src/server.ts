@@ -1,6 +1,7 @@
 import * as fs from 'fs';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import * as klog from './types';
+import { spawn } from 'child_process';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
     createConnection,
     TextDocuments,
@@ -13,7 +14,6 @@ import {
     InitializeResult,
     Position
 } from 'vscode-languageserver/node';
-import { spawn } from 'child_process';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
