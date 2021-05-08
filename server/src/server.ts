@@ -16,6 +16,13 @@ import {
     TextDocumentChangeEvent
 } from 'vscode-languageserver/node';
 
+type ValidateOnMode = 'save' | 'edit'
+
+interface Settings {
+    klogPath: string,
+    validateOn: ValidateOnMode,
+}
+
 const connection = createConnection(ProposedFeatures.all);
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
@@ -23,12 +30,12 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
-const documentSettingsMap: Map<string, Thenable<klog.Settings>> = new Map();
-const defaultSettings: klog.Settings = {
+const documentSettingsMap: Map<string, Thenable<Settings>> = new Map();
+const defaultSettings: Settings = {
     klogPath: '',
     validateOn: 'save'
 };
-let globalSettings: klog.Settings = defaultSettings;
+let globalSettings: Settings = defaultSettings;
 
 connection.onInitialize((params: InitializeParams) => {
 
@@ -87,7 +94,7 @@ connection.onDidChangeConfiguration(change => {
         // Reset all cached document settings
         documentSettingsMap.clear();
     } else {
-        globalSettings = <klog.Settings>((change.settings.klog || defaultSettings));
+        globalSettings = <Settings>((change.settings.klog || defaultSettings));
     }
 
     // Revalidate all open text documents
@@ -117,7 +124,7 @@ async function foo(change: TextDocumentChangeEvent<TextDocument>, type: klog.Val
     validateTextDocument(change.document);
 }
 
-function getDocumentSettings(resource: string): Thenable<klog.Settings> {
+function getDocumentSettings(resource: string): Thenable<Settings> {
 
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);

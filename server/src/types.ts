@@ -1,10 +1,3 @@
-export type ValidateOnMode = 'save' | 'edit'
-
-export interface Settings {
-    klogPath: string,
-    validateOn: ValidateOnMode,
-}
-
 export type Error = {
     line: number,
     column: number,
