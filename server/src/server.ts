@@ -116,9 +116,6 @@ documents.onDidChangeContent(async (change) => {
     validateTextDocument(change.document);
 });
 
-documents.listen(connection);
-connection.listen();
-
 function getDocumentSettings(resource: string): Thenable<klog.Settings> {
     if (!hasConfigurationCapability) {
         return Promise.resolve(globalSettings);
@@ -216,3 +213,6 @@ function diagnosticFromKlogError(error: klog.Error, uri: string): Diagnostic {
 
     return diagnostic
 }
+
+documents.listen(connection);
+connection.listen();
