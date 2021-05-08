@@ -114,7 +114,7 @@ documents.onDidChangeContent(async (change) => {
     foo(change, 'edit')
 });
 
-async function foo(change: TextDocumentChangeEvent<TextDocument>, type: klog.ValidateOnMode) {
+async function foo(change: TextDocumentChangeEvent<TextDocument>, type: ValidateOnMode) {
 
     const settings = await getDocumentSettings(change.document.uri);
     if (settings.validateOn !== type) {
