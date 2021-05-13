@@ -106,15 +106,14 @@ documents.onDidClose(e => {
 });
 
 documents.onDidSave(async (change) => {
-
-    foo(change, 'save')
+    validateDocumentOnEvent(change, 'save')
 });
 
 documents.onDidChangeContent(async (change) => {
-    foo(change, 'edit')
+    validateDocumentOnEvent(change, 'edit')
 });
 
-async function foo(change: TextDocumentChangeEvent<TextDocument>, type: ValidateOnMode) {
+async function validateDocumentOnEvent(change: TextDocumentChangeEvent<TextDocument>, type: ValidateOnMode) {
 
     const settings = await getDocumentSettings(change.document.uri);
     if (settings.validateOn !== type) {
