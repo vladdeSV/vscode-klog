@@ -166,7 +166,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
 }
 
-function isKlogExecutableValid(executable: string): 'valid' | 'invalid' | 'unset' {
+type ExecutableStatus = 'valid' | 'invalid' | 'unset';
+
+function isKlogExecutableValid(executable: string): ExecutableStatus {
 
     if (!executable) {
         return 'unset';
@@ -185,7 +187,7 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
     child.stdin.write(textDocument.getText());
     child.stdin.end();
 
-    const data = await new Promise<string>(async (resolve, reject) => {
+    const data = await new Promise<string>(async (resolve) => {
         child.stdout.on("data", buffer => resolve(buffer.toString()))
     })
 
