@@ -7,6 +7,7 @@ Syntax and snippet support for [klog](https://github.com/jotaen/klog) in VS Code
 ## Fetaures
 - Syntax highlight
 - Snippets
+- Language server
 
 ## License
 MIT © [Vladimirs Nordholm](https://github.com/vladdeSV)
