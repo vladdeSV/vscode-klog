@@ -1,0 +1,108 @@
+{
+    "root": true,
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "indent": "off",
+      "@typescript-eslint/indent": [
+        "error",
+        2
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": "off",
+      "@typescript-eslint/quotes": [
+        "error",
+        "single"
+      ],
+      "semi": "off",
+      "@typescript-eslint/semi": [
+        "error",
+        "never"
+      ],
+      "dot-location": [
+        "error",
+        "property"
+      ],
+      "dot-notation": "off",
+      "@typescript-eslint/dot-notation": [
+        "error"
+      ],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 1,
+          "maxEOF": 1,
+          "maxBOF": 0
+        }
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "@typescript-eslint/comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "@typescript-eslint/member-delimiter-style": [
+        "error",
+        {
+          "multiline": {
+            "delimiter": "none",
+            "requireLast": false
+          },
+          "singleline": {
+            "delimiter": "comma",
+            "requireLast": false
+          }
+        }
+      ],
+      "comma-spacing": "off",
+      "@typescript-eslint/comma-spacing": [
+        "error",
+        {
+          "before": false,
+          "after": true
+        }
+      ],
+      "comma-style": [
+        "error",
+        "last"
+      ],
+      "@typescript-eslint/brace-style": [
+        "error",
+        "1tbs"
+      ],
+      "eol-last": [
+        "error",
+        "always"
+      ],
+      "no-mixed-spaces-and-tabs": "error",
+      "default-case": "error",
+      "curly": "error",
+      "consistent-return": "error",
+      "@typescript-eslint/no-unsafe-assignment": "warn",
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          "checksVoidReturn": false
+        }
+      ]
+    }
+  }
