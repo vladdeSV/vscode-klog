@@ -277,6 +277,11 @@ string_decoder@~1.1.1:
   resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.3.9.tgz"
   integrity sha1-cXuPIgzAu3tE5AUUwisui7xw2Lk=
 
+typescript@^4:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
+  integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
+
 unzipper@^0.10.11:
   version "0.10.11"
   resolved "https://registry.yarnpkg.com/unzipper/-/unzipper-0.10.11.tgz"
