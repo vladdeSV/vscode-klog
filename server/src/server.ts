@@ -1,4 +1,3 @@
-import * as fs from 'fs'
 import * as klog from './types'
 import { spawn } from 'child_process'
 import { TextDocument } from 'vscode-languageserver-textdocument'
