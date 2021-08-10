@@ -19,8 +19,11 @@ import {
 type ValidateOnMode = 'save' | 'edit'
 
 interface Settings {
-  klogPath: string
-  validateOn: ValidateOnMode
+  languageServer: {
+    enable: boolean
+    path: string
+    validateOn: ValidateOnMode
+  }
 }
 
 const connection = createConnection(ProposedFeatures.all)
@@ -32,8 +35,11 @@ let hasDiagnosticRelatedInformationCapability = false
 
 const documentSettingsMap: Map<string, Thenable<Settings>> = new Map()
 const defaultSettings: Settings = {
-  klogPath: '',
-  validateOn: 'save',
+  languageServer: {
+    enable: false,
+    path: 'klog',
+    validateOn: 'save',
+  },
 }
 let globalSettings: Settings = defaultSettings
 
@@ -116,7 +122,7 @@ documents.onDidChangeContent(async (change) => {
 async function validateDocumentOnEvent(change: TextDocumentChangeEvent<TextDocument>, type: ValidateOnMode) {
 
   const settings = await getDocumentSettings(change.document.uri)
-  if (settings.validateOn !== type) {
+  if (settings.languageServer.validateOn !== type) {
     return
   }
 
@@ -142,43 +148,15 @@ function getDocumentSettings(resource: string): Thenable<Settings> {
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
   const settings = await getDocumentSettings(textDocument.uri)
-  const klogExecutable = settings.klogPath
 
-  let diagnostics: Diagnostic[]
-
-  const validExecutable = isKlogExecutableValid(klogExecutable)
-
-  if (validExecutable === 'unset') {
-    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: [] })
+  if (!settings.languageServer.enable || !settings.languageServer.path.trim()) {
     return
   }
 
-  if (validExecutable) {
-    diagnostics = await validateDocumentWithExecutable(klogExecutable, textDocument)
-  } else {
-    // create default error message if klog binary cannot be found.
-    diagnostics = [{
-      range: { start: Position.create(0, 0), end: Position.create(0, 99) },
-      message: `Invalid klog path '${klogExecutable}'`,
-    }]
-  }
+  const klogExecutable = settings.languageServer.path
+  const diagnostics = await validateDocumentWithExecutable(klogExecutable, textDocument)
 
   connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics })
-}
-
-type ExecutableStatus = 'valid' | 'invalid' | 'unset'
-
-function isKlogExecutableValid(executable: string): ExecutableStatus {
-
-  if (!executable) {
-    return 'unset'
-  }
-
-  if (!fs.existsSync(executable)) {
-    return 'invalid'
-  }
-
-  return 'valid'
 }
 
 async function validateDocumentWithExecutable(executablePath: string, textDocument: TextDocument): Promise<Diagnostic[]> {

@@ -55,14 +55,19 @@
             "type": "object",
             "title": "klog",
             "properties": {
-                "klog.klogPath": {
+                "klog.languageServer.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable communication with klog executable to validate documents."
+                },
+                "klog.languageServer.path": {
                     "type": "string",
                     "markdownDescription": "%ext.config.klogPath%",
                     "scope": "resource",
                     "description": "Path to executable.",
                     "default": "klog"
                 },
-                "klog.validateOn": {
+                "klog.languageServer.validateOn": {
                     "type": "string",
                     "default": "save",
                     "enum": [
