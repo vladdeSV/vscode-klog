@@ -50,6 +50,41 @@
                 "scopeName": "source.klog",
                 "path": "./snippets/klog.json"
             }
-        ]
-    }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "klog",
+            "properties": {
+                "klog.languageServer.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable communication with klog executable to validate documents."
+                },
+                "klog.languageServer.path": {
+                    "type": "string",
+                    "markdownDescription": "%ext.config.klogPath%",
+                    "scope": "resource",
+                    "description": "Path to executable.",
+                    "default": "klog"
+                },
+                "klog.languageServer.validateOn": {
+                    "type": "string",
+                    "default": "save",
+                    "enum": [
+                        "save",
+                        "edit"
+                    ],
+                    "enumDescriptions": [
+                        "Validate after saving document",
+                        "Validate while typing"
+                    ],
+                    "description": "When document should be validated."
+                }
+            }
+        }
+    },
+    "main": "./client/out/extension",
+    "activationEvents": [
+        "onLanguage:klog"
+    ]
 }
