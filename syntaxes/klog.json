@@ -89,15 +89,6 @@
                     "include": "#summary-under-date"
                 },
                 {
-                    "name": "invalid.illegal.summary.after-date.whitespace-prefix.klog",
-                    "match": "(?<=^ ).(.*$)",
-                    "captures": {
-                        "1": {
-                            "name": "string.unquoted.summary.after-date.klo"
-                        }
-                    }
-                },
-                {
                     "begin": "^(?:\t| {2,4})",
                     "end": "$",
                     "patterns": [
@@ -112,14 +103,6 @@
                         },
                         {
                             "include": "#summary-behind-entry"
-                        },
-                        {
-                            "match": "\\G(?<!\\S)(\\p{L}*)(?:\\s|$)",
-                            "captures": {
-                                "1": {
-                                    "name": "invalid.illegal.missing-spacing-after-entry.klog"
-                                }
-                            }
                         }
                     ]
                 }
