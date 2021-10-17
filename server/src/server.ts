@@ -165,9 +165,11 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
   child.stdin.end()
 
   const data = await new Promise<string>((resolve) => {
-    child.stdout.on('data', buffer => resolve(buffer.toString()))
+    let data = ''
+    child.stdout.on('data', buffer => data += buffer.toString())
+    child.stdout.on('end', () => resolve(data))
   })
-
+  
   const json: klog.JsonOutput = JSON.parse(data)
   const errors = json.errors ?? []
   const diagnostics: Diagnostic[] = errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri))
