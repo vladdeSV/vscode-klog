@@ -64,8 +64,8 @@
         "error",
         {
           "multiline": {
-            "delimiter": "none",
-            "requireLast": false
+            "delimiter": "semi",
+            "requireLast": true
           },
           "singleline": {
             "delimiter": "comma",

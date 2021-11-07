@@ -19,10 +19,10 @@ type ValidateOnMode = 'save' | 'edit'
 
 interface Settings {
   languageServer: {
-    enable: boolean
-    path: string
-    validateOn: ValidateOnMode
-  }
+    enable: boolean;
+    path: string;
+    validateOn: ValidateOnMode;
+  };
 }
 
 const connection = createConnection(ProposedFeatures.all)
@@ -87,7 +87,7 @@ connection.onInitialized(async () => {
   }
 
   if (hasWorkspaceFolderCapability) {
-    connection.workspace.onDidChangeWorkspaceFolders(_event => {
+    connection.workspace.onDidChangeWorkspaceFolders(() => {
       connection.console.log('Workspace folder change event received.')
     })
   }
