@@ -12,6 +12,7 @@
 		"url": "https://github.com/vladdeSV/vscode-klog"
 	},
 	"dependencies": {
+		"runtypes": "^6.5.0",
 		"vscode-languageserver": "^7.0.0",
 		"vscode-languageserver-textdocument": "^1.0.1"
 	},
@@ -20,6 +21,7 @@
 		"@types/node": "^16",
 		"@typescript-eslint/eslint-plugin": "^5",
 		"@typescript-eslint/parser": "^5",
+		"esbuild": "^0.13.12",
 		"eslint": "^8",
 		"typescript": "^4"
 	}
