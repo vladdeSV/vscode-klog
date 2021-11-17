@@ -1,6 +1,7 @@
-import * as klog from './types'
 import { spawn } from 'child_process'
 import { TextDocument } from 'vscode-languageserver-textdocument'
+import { Settings, KlogSettings, ValidateOnMode, JsonOutput, Error } from './types'
+import { Guard } from 'runtypes'
 import {
   createConnection,
   TextDocuments,
@@ -15,16 +16,6 @@ import {
   TextDocumentChangeEvent,
 } from 'vscode-languageserver/node'
 
-type ValidateOnMode = 'save' | 'edit'
-
-interface Settings {
-  languageServer: {
-    enable: boolean;
-    path: string;
-    validateOn: ValidateOnMode;
-  };
-}
-
 const connection = createConnection(ProposedFeatures.all)
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument)
 
@@ -32,15 +23,15 @@ let hasConfigurationCapability = false
 let hasWorkspaceFolderCapability = false
 let hasDiagnosticRelatedInformationCapability = false
 
-const documentSettingsMap: Map<string, Thenable<Settings>> = new Map()
-const defaultSettings: Settings = {
+const documentSettingsMap: Map<string, Thenable<KlogSettings>> = new Map()
+const defaultSettings: KlogSettings = {
   languageServer: {
     enable: false,
     path: 'klog',
     validateOn: 'save',
   },
 }
-let globalSettings: Settings = defaultSettings
+let globalSettings = KlogSettings.check(defaultSettings)
 
 connection.onInitialize((params: InitializeParams) => {
 
@@ -99,7 +90,7 @@ connection.onDidChangeConfiguration(change => {
     // Reset all cached document settings
     documentSettingsMap.clear()
   } else {
-    globalSettings = <Settings>((change.settings.klog || defaultSettings))
+    globalSettings = ((Settings.check(change.settings).klog || defaultSettings))
   }
 
   // Revalidate all open text documents
@@ -128,7 +119,7 @@ async function validateDocumentOnEvent(change: TextDocumentChangeEvent<TextDocum
   await validateTextDocument(change.document)
 }
 
-function getDocumentSettings(resource: string): Thenable<Settings> {
+function getDocumentSettings(resource: string): Thenable<KlogSettings> {
 
   if (!hasConfigurationCapability) {
     return Promise.resolve(globalSettings)
@@ -165,19 +156,38 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
   child.stdin.end()
 
   const data = await new Promise<string>((resolve) => {
+    const B = Guard(Buffer.isBuffer.bind(Buffer))
     let data = ''
-    child.stdout.on('data', buffer => data += buffer.toString())
+    child.stdout.on('data', buffer => data += B.check(buffer).toString())
     child.stdout.on('end', () => resolve(data))
   })
+  
+  let json: JsonOutput
 
-  const json: klog.JsonOutput = JSON.parse(data)
+  try {
+    json = JsonOutput.check(JSON.parse(data))
+  } catch {
+    const ret: Diagnostic[] = [
+      {
+        severity: DiagnosticSeverity.Error,
+        message: 'Could not parse document.',
+        source: 'klog',
+        range: {
+          start: Position.create(0, 0),
+          end: Position.create(0, 50),
+        },
+      },
+    ]
+    return ret
+  }
+
   const errors = json.errors ?? []
-  const diagnostics: Diagnostic[] = errors.map((error: klog.Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri))
+  const diagnostics: Diagnostic[] = errors.map((error: Error): Diagnostic => diagnosticFromKlogError(error, textDocument.uri))
 
   return diagnostics
 }
 
-function diagnosticFromKlogError(error: klog.Error, uri: string): Diagnostic {
+function diagnosticFromKlogError(error: Error, uri: string): Diagnostic {
 
   const diagnostic: Diagnostic = {
     severity: DiagnosticSeverity.Error,

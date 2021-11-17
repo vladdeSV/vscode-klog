@@ -1,59 +1,97 @@
-export type Error = {
-  line: number;
-  column: number;
-  length: number;
-  title: string;
-  details: string;
-}
+import { Static, Record, Union, Literal, String, Number, Boolean, Array, Null } from 'runtypes'
 
-type EntryCommon = {
-  summary: string;
-  tags: string[];
-  total: string;
-  total_mins: number;
-}
+export type ValidateOnMode = Static<typeof ValidateOnMode>
+export const ValidateOnMode = Union(
+  Literal('save'),
+  Literal('edit'),
+)
 
-type EntryRangeOpen = {
-  type: 'open_range';
-  start: string;
-  start_mins: number;
-}
+export type KlogSettings = Static<typeof KlogSettings>
+export const KlogSettings = Record({
+  languageServer: Record({
+    enable: Boolean,
+    path: String,
+    validateOn: ValidateOnMode,
+  }),
+})
 
-type EntryRange = {
-  type: 'range';
-  start: string;
-  start_mins: number;
-  end: string;
-  end_mins: number;
-}
+export type Settings = Static<typeof Settings>
+export const Settings = Record({
+  klog: KlogSettings,
+})
 
-type EntryDuration = {
-  type: 'duration';
-}
+export type Error = Static<typeof Error>
+export const Error = Record({
+  line: Number,
+  column: Number,
+  length: Number,
+  title: String,
+  details: String,
+})
 
-export type Entry = EntryCommon | EntryRange | EntryRangeOpen | EntryDuration
+type EntryCommon = Static<typeof EntryCommon>
+const EntryCommon = Record({
+  summary: String,
+  tags: String,
+  total: String,
+  total_mins: Number,
+})
 
-export type Record = {
-  date: string;
-  summary: string;
-  total: string;
-  total_mins: number;
-  should_total: string;
-  should_total_mins: number;
-  diff: string;
-  diff_mins: number;
-  tags: string[];
-  entries: Entry[];
-}
+type EntryRangeOpen = Static<typeof EntryRangeOpen>
+const EntryRangeOpen = Record({
+  type: Literal('open_range'),
+  start: String,
+  start_mins: Number,
+})
 
-type JsonSuccess = {
-  records: Record[];
-  errors: null;
-}
+type EntryRange = Static<typeof EntryRange>
+const EntryRange = Record({
+  type: Literal('range'),
+  start: String,
+  start_mins: Number,
+  end: String,
+  end_mins: Number,
+})
 
-type JsonError = {
-  records: null;
-  errors: Error[];
-}
+type EntryDuration = Static<typeof EntryDuration>
+const EntryDuration = Record({
+  type: Literal('duration'),
+})
 
-export type JsonOutput = JsonSuccess | JsonError
+type Entry = Static<typeof Entry>
+const Entry = Union(
+  EntryCommon,
+  EntryRange,
+  EntryRangeOpen,
+  EntryDuration,
+)
+
+type KlogRecord = Static<typeof KlogRecord>
+const KlogRecord = Record({
+  date: String,
+  summary: String,
+  total: String,
+  total_mins: Number,
+  should_total: String,
+  should_total_mins: Number,
+  diff: String,
+  diff_mins: Number,
+  tags: Array(String),
+  entries: Array(Entry),
+})
+
+const JsonSuccess = Record({
+  records: Array(KlogRecord),
+  errors: Null,
+})
+
+const JsonError = Record({
+  records: Null,
+  errors: Array(Error),
+})
+
+export type JsonOutput = Static<typeof JsonOutput>
+export const JsonOutput = Union(
+  JsonSuccess,
+  JsonError,
+)
