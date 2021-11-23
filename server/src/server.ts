@@ -2,6 +2,7 @@ import { spawn } from 'child_process'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { Settings, KlogSettings, ValidateOnMode, JsonOutput, Error } from './types'
 import { Guard } from 'runtypes'
+
 import {
   createConnection,
   TextDocuments,
@@ -15,6 +16,7 @@ import {
   Position,
   TextDocumentChangeEvent,
 } from 'vscode-languageserver/node'
+import { getKlogVersion, getKlogVersionState } from './klog'
 
 const connection = createConnection(ProposedFeatures.all)
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument)
@@ -144,6 +146,29 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   }
 
   const klogExecutable = settings.languageServer.path
+
+  const version = await getKlogVersion(klogExecutable)
+  const versionState = getKlogVersionState(version, 'windows')
+
+  if (!versionState.valid) {
+
+    const errorMessage = version ? `Version ${version} is not supported. Please upgrade to latest version.\n\n` : ''
+
+    const ret: Diagnostic[] = [
+      {
+        severity: DiagnosticSeverity.Warning,
+        message: `${errorMessage}Reason: ${versionState.message}`,
+        source: 'klog',
+        range: {
+          start: Position.create(0, 0),
+          end: Position.create(0, 50),
+        },
+      },
+    ]
+    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: ret })
+    return
+  }
+
   const diagnostics = await validateDocumentWithExecutable(klogExecutable, textDocument)
 
   connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics })
@@ -161,7 +186,7 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
     child.stdout.on('data', buffer => data += B.check(buffer).toString())
     child.stdout.on('end', () => resolve(data))
   })
-  
+
   let json: JsonOutput
 
   try {
