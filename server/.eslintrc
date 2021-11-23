@@ -94,7 +94,6 @@
       "always"
     ],
     "no-mixed-spaces-and-tabs": "error",
-    "default-case": "error",
     "curly": "error",
     "consistent-return": "error",
     "@typescript-eslint/no-unsafe-assignment": "warn",
@@ -106,10 +105,11 @@
     ],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
-      "error",
+      "warn",
       {
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "default-case": "off"  
   }
 }
