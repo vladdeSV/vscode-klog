@@ -64,8 +64,8 @@
       "error",
       {
         "multiline": {
-          "delimiter": "semi",
-          "requireLast": true
+          "delimiter": "none",
+          "requireLast": false
         },
         "singleline": {
           "delimiter": "comma",
@@ -85,6 +85,7 @@
       "error",
       "last"
     ],
+    "brace-style": "off",
     "@typescript-eslint/brace-style": [
       "error",
       "1tbs"
@@ -110,6 +111,6 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "default-case": "off"  
+    "default-case": "off"
   }
 }
