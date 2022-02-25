@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `klog` version validation
 - Changelog, retroactively
 
+### Removed
+- Removed errornous syntax hightlight, and instead depend on klog binary for errors
+
 ## [1.0.0] - 2021-04-06
 ### Added
 - Syntax highlighting
