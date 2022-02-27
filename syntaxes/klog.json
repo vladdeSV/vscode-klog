@@ -27,6 +27,16 @@
                 }
             ]
         },
+        "summary-multiline": {
+            "name": "string.unquoted.summary.multiline.klog",
+            "begin": "(?<=\\t\\t| {4})(?!\\d)",
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#tag"
+                }
+            ]
+        },
         "timespan": {
             "name": "markup.other.timespan.klog",
             "match": "(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)\\s*-\\s*(<?(?:[01]?\\d|2[0-3]):[0-5]\\d(?:am|pm)?>?)"
@@ -103,6 +113,9 @@
                         },
                         {
                             "include": "#summary-behind-entry"
+                        },
+                        {
+                            "include": "#summary-multiline"
                         }
                     ]
                 }
