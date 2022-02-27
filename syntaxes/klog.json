@@ -29,7 +29,7 @@
         },
         "summary-multiline": {
             "name": "string.unquoted.summary.multiline.klog",
-            "begin": "(?<=\\t\\t| {4})(?!\\d)",
+            "begin": "(?<=\\t\\t| {4})(?!-?\\d+)",
             "end": "$",
             "patterns": [
                 {
