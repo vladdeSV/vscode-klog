@@ -24,7 +24,7 @@ async function getKlogVersion(klogExecutable: string): Promise<string | undefine
   })
 
   const parseVersionString = (s: string): string | undefined => {
-    const a = s.match(/v(\d+\.\d+)/)?.[1] ?? undefined;
+    const a = s.match(/v(\d+\.\d+|\?\.\?)/)?.[1] ?? undefined;
 
     return a
   }
@@ -65,10 +65,16 @@ const equal = 0
 const greater = 1
 
 /// very basic comparison of numerical versions, separated with dots (ie. '1.3', '2.4.2'). returns
-function compareVersions(a: string, b: string): -1 | 0 | 1 {
+function compareVersions(a: string, b: string): -1 | 0 | 1 | undefined {
   const aa = a.split('.').map(x => Number(x))
   const bb = b.split('.').map(x => Number(x))
   const maxLength = Math.max(aa.length, bb.length)
+
+  for (const n of [...aa, ...bb]) {
+    if (Number.isNaN(n)) {
+      return undefined
+    }
+  }
 
   const aal = aa.length
   const bbl = bb.length
