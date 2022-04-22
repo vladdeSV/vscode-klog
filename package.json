@@ -6,6 +6,9 @@
     "license": "MIT",
     "publisher": "vladdeSV",
     "icon": "resource/klog-icon.png",
+    "scripts": {
+        "package-after-build": "yarn vsce package --githubBranch=main"
+    },
     "engines": {
         "vscode": "^1.52.0"
     },
