@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2022-04-22
+### Added
+- Support for tags with values (eg. `#tag=value`)
+
 ## [1.2.0] - 2022-03-31
 ### Added
 - Multiline entry summary syntax highlight
