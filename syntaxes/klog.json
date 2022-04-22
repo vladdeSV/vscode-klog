@@ -5,7 +5,7 @@
     "repository": {
         "tag": {
             "name": "keyword.other.tag.klog",
-            "match": "#[\\p{L}\\d_-]+"
+            "match": "#[\\p{L}\\d_-]+(=([\\p{L}\\d_-]+|\".*\"|'.*'))?"
         },
         "summary-under-date": {
             "name": "string.unquoted.summary.after-date.klog",
