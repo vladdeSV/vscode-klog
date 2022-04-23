@@ -92,5 +92,8 @@
     ],
     "dependencies": {
         "runtypes": "^6.5.0"
+    },
+    "devDependencies": {
+        "vsce": "^2.7.0"
     }
 }
