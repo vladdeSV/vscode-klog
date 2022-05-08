@@ -83,13 +83,11 @@ connection.onInitialized(async () => {
 connection.onDidChangeConfiguration(change => {
 
   if (hasConfigurationCapability) {
-    // Reset all cached document settings
     documentSettingsMap.clear()
   } else {
     globalSettings = ((Settings.check(change.settings).klog || defaultSettings))
   }
 
-  // Revalidate all open text documents
   documents.all().forEach(validateTextDocument)
 })
 
