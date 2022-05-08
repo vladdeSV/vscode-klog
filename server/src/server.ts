@@ -39,8 +39,6 @@ connection.onInitialize((params: InitializeParams) => {
 
   const capabilities = params.capabilities
 
-  // Does the client support the `workspace/configuration` request?
-  // If not, we fall back using global settings.
   hasConfigurationCapability = !!(
     capabilities.workspace && !!capabilities.workspace.configuration
   )
@@ -56,10 +54,6 @@ connection.onInitialize((params: InitializeParams) => {
   const result: InitializeResult = {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
-      // // Tell the client that this server supports code completion.
-      // completionProvider: {
-      //     resolveProvider: false
-      // }
     },
   }
 
