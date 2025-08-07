@@ -37,7 +37,11 @@
                 ],
                 "extensions": [
                     ".klg"
-                ]
+				],
+				"icon": {
+					"dark": "./resource/klog-white.svg",
+					"light": "./resource/klog-black.svg"
+				}
             }
         ],
         "grammars": [
