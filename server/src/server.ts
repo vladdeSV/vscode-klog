@@ -1,7 +1,7 @@
 import { spawn } from 'child_process'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { Settings, KlogSettings, ValidateOnMode, JsonOutput, Error } from './types'
-import { InstanceOf } from 'runtypes'
+import * as z from 'zod'
 
 import {
   createConnection,
@@ -33,7 +33,7 @@ const defaultSettings: KlogSettings = {
     validateOn: 'save',
   },
 }
-let globalSettings = KlogSettings.check(defaultSettings)
+let globalSettings = KlogSettings.parse(defaultSettings)
 
 connection.onInitialize((params: InitializeParams) => {
 
@@ -85,7 +85,7 @@ connection.onDidChangeConfiguration(change => {
   if (hasConfigurationCapability) {
     documentSettingsMap.clear()
   } else {
-    globalSettings = ((Settings.check(change.settings).klog || defaultSettings))
+    globalSettings = ((Settings.parse(change.settings).klog || defaultSettings))
   }
 
   documents.all().forEach(validateTextDocument)
@@ -174,16 +174,16 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
   child.stdin.end()
 
   const data = await new Promise<string>((resolve) => {
-    const BufferRuntype = InstanceOf(Buffer)
+    const BufferSchema = z.instanceof(Buffer)
     let data = ''
-    child.stdout.on('data', buffer => data += BufferRuntype.check(buffer).toString())
+    child.stdout.on('data', buffer => data += BufferSchema.parse(buffer).toString())
     child.stdout.on('end', () => resolve(data))
   })
 
   let json: JsonOutput
 
   try {
-    json = JsonOutput.check(JSON.parse(data))
+    json = JsonOutput.parse(JSON.parse(data))
   } catch {
     const ret: Diagnostic[] = [
       {

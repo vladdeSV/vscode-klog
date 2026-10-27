@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { InstanceOf } from 'runtypes'
+import * as z from 'zod'
 
 type A = {
   valid: true
@@ -17,9 +17,9 @@ async function getKlogVersion(klogExecutable: string): Promise<string | undefine
   const child = spawn(`"${klogExecutable}" version --no-check`, { shell: true })
   child.stdin.end()
   const version = await new Promise<string>((resolve) => {
-    const BufferRuntype = InstanceOf(Buffer)
+    const BufferSchema = z.instanceof(Buffer)
     let data = ''
-    child.stdout.on('data', buffer => data += BufferRuntype.check(buffer).toString())
+    child.stdout.on('data', buffer => data += BufferSchema.parse(buffer).toString())
     child.stdout.on('end', () => resolve(data.trim()))
   })
 

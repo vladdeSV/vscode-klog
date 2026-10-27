@@ -1,97 +1,96 @@
-import { Static, Object, Union, Literal, String, Number, Boolean, Array, Null } from 'runtypes'
+import * as z from 'zod'
 
-export type ValidateOnMode = Static<typeof ValidateOnMode>
-export const ValidateOnMode = Union(
-  Literal('save'),
-  Literal('edit'),
-)
+export type ValidateOnMode = z.infer<typeof ValidateOnMode>
+export const ValidateOnMode = z.enum([
+  'save',
+  'edit',
+])
 
-export type KlogSettings = Static<typeof KlogSettings>
-export const KlogSettings = Object({
-  languageServer: Object({
-    enable: Boolean,
-    path: String,
+export type KlogSettings = z.infer<typeof KlogSettings>
+export const KlogSettings = z.object({
+  languageServer: z.object({
+    enable: z.boolean(),
+    path: z.string(),
     validateOn: ValidateOnMode,
   }),
 })
 
-export type Settings = Static<typeof Settings>
-export const Settings = Object({
+export type Settings = z.infer<typeof Settings>
+export const Settings = z.object({
   klog: KlogSettings,
 })
 
-export type Error = Static<typeof Error>
-export const Error = Object({
-  line: Number,
-  column: Number,
-  length: Number,
-  title: String,
-  details: String,
+export type Error = z.infer<typeof Error>
+export const Error = z.object({
+  line: z.number(),
+  column: z.number(),
+  length: z.number(),
+  title: z.string(),
+  details: z.string(),
 })
 
-type EntryCommon = Static<typeof EntryCommon>
-const EntryCommon = Object({
-  summary: String,
-  tags: String,
-  total: String,
-  total_mins: Number,
+type EntryCommon = z.infer<typeof EntryCommon>
+const EntryCommon = z.object({
+  summary: z.string(),
+  tags: z.array(z.string()),
+  total: z.string(),
+  total_mins: z.number(),
 })
 
-type EntryRangeOpen = Static<typeof EntryRangeOpen>
-const EntryRangeOpen = Object({
-  type: Literal('open_range'),
-  start: String,
-  start_mins: Number,
+type EntryRangeOpen = z.infer<typeof EntryRangeOpen>
+const EntryRangeOpen = EntryCommon.extend({
+  type: z.literal('open_range'),
+  start: z.string(),
+  start_mins: z.number(),
 })
 
-type EntryRange = Static<typeof EntryRange>
-const EntryRange = Object({
-  type: Literal('range'),
-  start: String,
-  start_mins: Number,
-  end: String,
-  end_mins: Number,
+type EntryRange = z.infer<typeof EntryRange>
+const EntryRange = EntryCommon.extend({
+  type: z.literal('range'),
+  start: z.string(),
+  start_mins: z.number(),
+  end: z.string(),
+  end_mins: z.number(),
 })
 
-type EntryDuration = Static<typeof EntryDuration>
-const EntryDuration = Object({
-  type: Literal('duration'),
+type EntryDuration = z.infer<typeof EntryDuration>
+const EntryDuration = EntryCommon.extend({
+  type: z.literal('duration'),
 })
 
-type Entry = Static<typeof Entry>
-const Entry = Union(
-  EntryCommon,
-  EntryRange,
+type Entry = z.infer<typeof Entry>
+const Entry = z.discriminatedUnion('type', [
   EntryRangeOpen,
+  EntryRange,
   EntryDuration,
-)
+])
 
-type KlogRecord = Static<typeof KlogRecord>
-const KlogRecord = Object({
-  date: String,
-  summary: String,
-  total: String,
-  total_mins: Number,
-  should_total: String,
-  should_total_mins: Number,
-  diff: String,
-  diff_mins: Number,
-  tags: Array(String),
-  entries: Array(Entry),
+type KlogRecord = z.infer<typeof KlogRecord>
+const KlogRecord = z.object({
+  date: z.string(),
+  summary: z.string(),
+  total: z.string(),
+  total_mins: z.number(),
+  should_total: z.string(),
+  should_total_mins: z.number(),
+  diff: z.string(),
+  diff_mins: z.number(),
+  tags: z.array(z.string()),
+  entries: z.array(Entry),
 })
 
-const JsonSuccess = Object({
-  records: Array(KlogRecord),
-  errors: Null,
+const JsonSuccess = z.object({
+  records: z.array(KlogRecord),
+  errors: z.null(),
 })
 
-const JsonError = Object({
-  records: Null,
-  errors: Array(Error),
+const JsonError = z.object({
+  records: z.null(),
+  errors: z.array(Error),
 })
 
-export type JsonOutput = Static<typeof JsonOutput>
-export const JsonOutput = Union(
+export type JsonOutput = z.infer<typeof JsonOutput>
+export const JsonOutput = z.union([
   JsonSuccess,
   JsonError,
-)
+])
