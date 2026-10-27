@@ -2,15 +2,25 @@
     "name": "vscode-klog",
     "displayName": "klog",
     "description": "klog syntax and validation",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "license": "MIT",
     "publisher": "vladdeSV",
     "icon": "resource/klog-icon.png",
+    "workspaces": [
+        "client",
+        "server"
+    ],
     "scripts": {
-        "package-after-build": "yarn vsce package --githubBranch=main"
+        "build": "bun run build:client && bun run build:server",
+        "build:client": "bun build client/src/extension.ts --outdir client/out --target node --format cjs --external vscode --sourcemap=linked",
+        "build:server": "bun build server/src/server.ts --outdir server/out --target node --format cjs --sourcemap=linked",
+        "typecheck": "tsc --noEmit --project client && tsc --noEmit --project server",
+        "lint": "bun run --filter vscode-klog-server lint",
+        "package": "bun run build && vsce package --no-dependencies --githubBranch=main",
+        "publish": "bun run build && vsce publish --no-dependencies --githubBranch=main"
     },
     "engines": {
-        "vscode": "^1.52.0"
+        "vscode": "^1.91.0"
     },
     "categories": [
         "Programming Languages"
@@ -90,10 +100,9 @@
     "activationEvents": [
         "onLanguage:klog"
     ],
-    "dependencies": {
-        "runtypes": "^6.5.0"
-    },
     "devDependencies": {
-        "vsce": "^2.7.0"
+        "@types/node": "^20.19.43",
+        "@vscode/vsce": "^4.0.0",
+        "typescript": "^6.0.3"
     }
 }

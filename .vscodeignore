@@ -1,4 +1,11 @@
-.vscode/**
-.vscode-test/**
-.gitignore
-vsc-extension-quickstart.md
+**/.vscode/**
+**/node_modules/**
+**/src/**
+**/tsconfig.json
+**/.gitignore
+client/package.json
+server/package.json
+server/eslint.config.mjs
+bun.lock
+.gitattributes
+resource/klog-icon.afdesign

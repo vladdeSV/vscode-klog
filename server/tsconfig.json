@@ -1,30 +1,17 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
+		"target": "ES2022",
 		"lib": [
-			"ES2020"
+			"ES2022"
 		],
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"sourceMap": true,
+		"module": "node20",
+		"types": [
+			"node"
+		],
 		"strict": true,
-		"outDir": "out",
-		"rootDir": "src",
-    "noImplicitAny": false
+		"noEmit": true
 	},
 	"include": [
 		"src"
-	],
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	],
-	"watchOptions": {
-		// Use native file system events for files and directories
-		"watchFile": "useFsEvents",
-		"watchDirectory": "useFsEvents",
-		// Poll files for updates more frequently
-		// when they're updated a lot.
-		"fallbackPolling": "dynamicPriority"
-	}
+	]
 }

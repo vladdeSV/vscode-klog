@@ -1,14 +1,14 @@
 import { spawn } from 'child_process'
-import { Guard } from 'runtypes'
+import { InstanceOf } from 'runtypes'
 
 type A = {
-  valid: true;
-  message: undefined;
+  valid: true
+  message: undefined
 }
 
 type B = {
-  valid: false;
-  message: string;
+  valid: false
+  message: string
 }
 
 type KlogVersionState = A | B
@@ -17,14 +17,14 @@ async function getKlogVersion(klogExecutable: string): Promise<string | undefine
   const child = spawn(`"${klogExecutable}" version --no-check`, { shell: true })
   child.stdin.end()
   const version = await new Promise<string>((resolve) => {
-    const B = Guard(Buffer.isBuffer.bind(Buffer))
+    const BufferRuntype = InstanceOf(Buffer)
     let data = ''
-    child.stdout.on('data', buffer => data += B.check(buffer).toString())
+    child.stdout.on('data', buffer => data += BufferRuntype.check(buffer).toString())
     child.stdout.on('end', () => resolve(data.trim()))
   })
 
   const parseVersionString = (s: string): string | undefined => {
-    const a = s.match(/v(\d+\.\d+|\?\.\?)/)?.[1] ?? undefined;
+    const a = s.match(/v(\d+\.\d+|\?\.\?)/)?.[1] ?? undefined
 
     return a
   }

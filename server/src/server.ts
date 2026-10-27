@@ -1,7 +1,7 @@
 import { spawn } from 'child_process'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { Settings, KlogSettings, ValidateOnMode, JsonOutput, Error } from './types'
-import { Guard } from 'runtypes'
+import { InstanceOf } from 'runtypes'
 
 import {
   createConnection,
@@ -157,13 +157,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
         },
       },
     ]
-    connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: ret })
+    await connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: ret })
     return
   }
 
   const diagnostics = await validateDocumentWithExecutable(klogExecutable, textDocument)
 
-  connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics })
+  await connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics })
 }
 
 async function validateDocumentWithExecutable(executablePath: string, textDocument: TextDocument): Promise<Diagnostic[]> {
@@ -173,9 +173,9 @@ async function validateDocumentWithExecutable(executablePath: string, textDocume
   child.stdin.end()
 
   const data = await new Promise<string>((resolve) => {
-    const B = Guard(Buffer.isBuffer.bind(Buffer))
+    const BufferRuntype = InstanceOf(Buffer)
     let data = ''
-    child.stdout.on('data', buffer => data += B.check(buffer).toString())
+    child.stdout.on('data', buffer => data += BufferRuntype.check(buffer).toString())
     child.stdout.on('end', () => resolve(data))
   })
 

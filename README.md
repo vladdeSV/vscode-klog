@@ -9,5 +9,18 @@ Syntax and snippet support for [klog](https://github.com/jotaen/klog) in VS Code
 - Snippets
 - In-editor validation
 
+## Development
+Requires [Bun](https://bun.com/).
+
+```sh
+bun install
+bun run build      # bundles the client and the language server
+bun run typecheck
+bun run lint
+bun run package    # produces a .vsix
+```
+
+Press <kbd>F5</kbd> to launch a VS Code window with the extension loaded.
+
 ## License
 MIT © [Vladimirs Nordholm](https://github.com/vladdeSV)

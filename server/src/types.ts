@@ -1,4 +1,4 @@
-import { Static, Record, Union, Literal, String, Number, Boolean, Array, Null } from 'runtypes'
+import { Static, Object, Union, Literal, String, Number, Boolean, Array, Null } from 'runtypes'
 
 export type ValidateOnMode = Static<typeof ValidateOnMode>
 export const ValidateOnMode = Union(
@@ -7,8 +7,8 @@ export const ValidateOnMode = Union(
 )
 
 export type KlogSettings = Static<typeof KlogSettings>
-export const KlogSettings = Record({
-  languageServer: Record({
+export const KlogSettings = Object({
+  languageServer: Object({
     enable: Boolean,
     path: String,
     validateOn: ValidateOnMode,
@@ -16,12 +16,12 @@ export const KlogSettings = Record({
 })
 
 export type Settings = Static<typeof Settings>
-export const Settings = Record({
+export const Settings = Object({
   klog: KlogSettings,
 })
 
 export type Error = Static<typeof Error>
-export const Error = Record({
+export const Error = Object({
   line: Number,
   column: Number,
   length: Number,
@@ -30,7 +30,7 @@ export const Error = Record({
 })
 
 type EntryCommon = Static<typeof EntryCommon>
-const EntryCommon = Record({
+const EntryCommon = Object({
   summary: String,
   tags: String,
   total: String,
@@ -38,14 +38,14 @@ const EntryCommon = Record({
 })
 
 type EntryRangeOpen = Static<typeof EntryRangeOpen>
-const EntryRangeOpen = Record({
+const EntryRangeOpen = Object({
   type: Literal('open_range'),
   start: String,
   start_mins: Number,
 })
 
 type EntryRange = Static<typeof EntryRange>
-const EntryRange = Record({
+const EntryRange = Object({
   type: Literal('range'),
   start: String,
   start_mins: Number,
@@ -54,7 +54,7 @@ const EntryRange = Record({
 })
 
 type EntryDuration = Static<typeof EntryDuration>
-const EntryDuration = Record({
+const EntryDuration = Object({
   type: Literal('duration'),
 })
 
@@ -67,7 +67,7 @@ const Entry = Union(
 )
 
 type KlogRecord = Static<typeof KlogRecord>
-const KlogRecord = Record({
+const KlogRecord = Object({
   date: String,
   summary: String,
   total: String,
@@ -80,12 +80,12 @@ const KlogRecord = Record({
   entries: Array(Entry),
 })
 
-const JsonSuccess = Record({
+const JsonSuccess = Object({
   records: Array(KlogRecord),
   errors: Null,
 })
 
-const JsonError = Record({
+const JsonError = Object({
   records: Null,
   errors: Array(Error),
 })
