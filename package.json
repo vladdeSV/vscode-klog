@@ -75,7 +75,6 @@
                 },
                 "klog.languageServer.path": {
                     "type": "string",
-                    "markdownDescription": "%ext.config.klogPath%",
                     "scope": "resource",
                     "description": "Path to executable.",
                     "default": "klog"
