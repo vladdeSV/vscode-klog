@@ -140,7 +140,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   const klogExecutable = settings.languageServer.path
 
   const version = await getKlogVersion(klogExecutable)
-  const versionState = getKlogVersionState(version, 'windows')
+  const os = process.platform === 'win32' ? 'windows' : 'posix'
+  const versionState = getKlogVersionState(version, os)
 
   if (!versionState.valid) {
 
