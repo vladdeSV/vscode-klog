@@ -90,15 +90,15 @@ function compareVersions(a: string, b: string): -1 | 0 | 1 | undefined {
     const bbb = bb[i]
 
     if (aaa < bbb) {
-      return -1
+      return less
     }
 
     if (aaa > bbb) {
-      return 1
+      return greater
     }
   }
 
-  return 0
+  return equal
 }
 
 export { getKlogVersion, getKlogVersionState }
