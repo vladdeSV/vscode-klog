@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-28
+This release is long overdue.
+
+### Added
+- File icons for `.klg` files ([#46](https://github.com/vladdeSV/vscode-klog/pull/46), [#11](https://github.com/vladdeSV/vscode-klog/issues/11)) (Thanks @jgaehring!)
+
+### Changed
+- Updated all dependencies (requires VS Code 1.91 or later)
+- Changed underlying runtime type checking library
+
+### Fixed
+- Description of the `klog.languageServer.path` setting showed a placeholder instead of the actual text
+- Check klog version with actual OS, not hardcoded "windows"
+- Correctly read some klog JSON fields
+
 ## [1.3.0] - 2022-04-22
 ### Added
 - Support for tags with values (eg. `#tag=value`)
